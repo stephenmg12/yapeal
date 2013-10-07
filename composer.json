@@ -23,6 +23,7 @@
         "doctrine/dbal":                "2.4.*@dev",
         "doctrine/migrations":          "dev-master",
         "doctrine/orm":                 "2.4.*@dev",
+        "ext-apc":                      "*",
         "ext-curl":                     "*",
         "ext-date":                     "*",
         "ext-hash":                     "*",
@@ -54,7 +55,7 @@
         "behat/behat":                 "2.5.*@dev",
         "ext-xsl":                     "*",
         "phpdocumentor/phpdocumentor": "dev-develop",
-        "phpunit/phpunit":             "3.8.*@dev",
+        "phpunit/phpunit":             "3.7.*@dev",
         "twig/twig":                   "v1.13.2"
     }
 }
