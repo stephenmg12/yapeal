@@ -1,188 +1,153 @@
-#!/usr/bin/php -Cq
 <?php
 /**
- * Used to get information from Eve-online API and store in database.
+ * Contains Yapeal class
  *
- * This script expects to be ran from a command line or from a crontab job. The
- *  script can optionally be pass a config file name with -c option.
+ * PHP version 5.3
  *
- * PHP version 5
+ * LICENSE: This file is part of Yet Another Php Eve Api library also know as Yapeal which will be used to refer to it
+ * in the rest of this license.
  *
- * LICENSE: This file is part of Yet Another Php Eve Api library also know
- * as Yapeal.
+ * Yapeal is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- *  Yapeal is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
+ * Yapeal is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
  *
- *  Yapeal is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with Yapeal. If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License along with Yapeal. If not, see
+ * <http://www.gnu.org/licenses/>.
  *
  * @author     Michael Cummings <mgcummings@yahoo.com>
- * @copyright  Copyright (c) 2008-2013, Michael Cummings
+ * @copyright  Copyright (c) 2013, Michael Cummings
  * @license    http://www.gnu.org/copyleft/lesser.html GNU LGPL
- * @package    Yapeal
  * @link       http://code.google.com/p/yapeal/
  * @link       http://www.eveonline.com/
- * @since      revision 561
  */
 /**
- * @internal Allow viewing of the source code in web browser.
+ * Main namespace for all of Yapeal. All other namespaces used are under it.
  */
-if (isset($_REQUEST['viewSource'])) {
-  highlight_file(__FILE__);
-  exit();
-};
-/**
- * @internal Only let this code be ran in CLI.
- */
-if (PHP_SAPI != 'cli') {
-  header('HTTP/1.0 403 Forbidden', TRUE, 403);
-  $mess = basename(__FILE__) . ' only works with CLI version of PHP but tried'
-    . ' to run it using ' . PHP_SAPI . ' instead.' . PHP_EOL;
-  die($mess);
-};
-/**
- * @internal Only let this code be ran directly.
- */
-$included = get_included_files();
-if (count($included) > 1 || $included[0] != __FILE__) {
-  $mess = basename(__FILE__)
-    . ' must be called directly and can not be included.' . PHP_EOL;
-  fwrite(STDERR, $mess);
-  exit(1);
-};
-// Set the default timezone to GMT.
-date_default_timezone_set('GMT');
-/**
- * Define short name for directory separator which always uses unix '/'.
- */
-define('DS', '/');
-// Check if the base path for Yapeal has been set in the environment.
-$dir = @getenv('YAPEAL_BASE');
-if ($dir === FALSE) {
-  // Used to overcome path issues caused by how script is ran.
-  $dir = str_replace('\\', DS, dirname(__FILE__)) . DS;
-};
-// Get path constants so they can be used.
-require_once $dir . 'inc' . DS . 'common_paths.php';
-require_once YAPEAL_BASE . 'revision.php';
-require_once YAPEAL_INC . 'parseCommandLineOptions.php';
-require_once YAPEAL_INC . 'getSettingsFromIniFile.php';
-require_once YAPEAL_INC . 'usage.php';
-require_once YAPEAL_INC . 'showVersion.php';
-require_once YAPEAL_INC . 'setGeneralSectionConstants.php';
-$shortOpts = array('c:', 'l:');
-$longOpts = array('config:', 'log:');
-// Parser command line options first in case user just wanted to see help.
-$options = parseCommandLineOptions($shortOpts, $longOpts);
-$exit = FALSE;
-if (isset($options['help'])) {
-  usage(__FILE__, $shortOpts, $longOpts);
-  exit(0);
-};
-if (isset($options['version'])) {
-  showVersion(__FILE__);
-  exit(0);
-};
-if (!empty($options['config'])) {
-  $iniVars = getSettingsFromIniFile($options['config']);
-} else {
-  $iniVars = getSettingsFromIniFile();
-};
-if (empty($iniVars)) {
-  exit(1);
-};
-require_once YAPEAL_CLASS . 'YapealAutoLoad.php';
-YapealAutoLoad::activateAutoLoad();
-/**
- * Define constants and properties from settings in configuration.
- */
-if (!empty($options['log-config'])) {
-  YapealErrorHandler::setLoggingSectionProperties($iniVars['Logging'],
-    $options['log-config']);
-  unset($options['config']);
-} else {
-  YapealErrorHandler::setLoggingSectionProperties($iniVars['Logging']);
-};
-YapealErrorHandler::setupCustomErrorAndExceptionSettings();
-YapealApiCache::setCacheSectionProperties($iniVars['Cache']);
-YapealDBConnection::setDatabaseSectionConstants($iniVars['Database']);
-setGeneralSectionConstants($iniVars);
-unset($iniVars);
-try {
-  /**
-   * Give ourselves a 'soft' limit of 10 minutes to finish.
-   */
-  define('YAPEAL_MAX_EXECUTE', strtotime('10 minutes'));
-  /**
-   * This is used to have the same time on all APIs that error out and need to
-   * be tried again.
-   */
-  define('YAPEAL_START_TIME', gmdate('Y-m-d H:i:s', YAPEAL_MAX_EXECUTE));
-  /* ************************************************************************
-   * Generate section list
-   * ************************************************************************/
-  $sectionList = FilterFileFinder::getStrippedFiles(YAPEAL_CLASS, 'Section');
-  if (count($sectionList) == 0) {
-    $mess = 'No section classes were found check path setting';
-    Logger::getLogger('yapeal')->error($mess);
-    exit(2);
-  };
-  //$sectionList = array_map('strtolower', $sectionList);
-  // Randomize order in which API sections are tried if there is a list.
-  if (count($sectionList) > 1) {
-    shuffle($sectionList);
-  };
-  $sql = 'select `section`';
-  $sql .= ' from `' . YAPEAL_TABLE_PREFIX . 'utilSections`';
-  try {
-    $con = YapealDBConnection::connect(YAPEAL_DSN);
-    $result = $con->GetCol($sql);
-  }
-  catch(ADODB_Exception $e) {
-    Logger::getLogger('yapeal')->fatal($e);
-  }
-  if (count($result) == 0) {
-    $mess = 'No sections were found in utilSections check database.';
-    Logger::getLogger('yapeal')->error($mess);
-    exit(2);
-  };
-  $result = array_map('ucfirst', $result);
-  $sectionList = array_intersect($sectionList, $result);
-  // Now take the list of sections and call each in turn.
-  foreach ($sectionList as $sec) {
-    $class = 'Section' . $sec;
-    try {
-      $instance = new $class();
-      $instance->pullXML();
-    }
-    catch (ADODB_Exception $e) {
-      Logger::getLogger('yapeal')->fatal($e);
-    }
-    // Going to sleep for a tenth of a second to let DB time to flush etc
-    // between sections.
-    usleep(100000);
-  };// foreach $section ...
-  /* ************************************************************************
-   * Final admin stuff
-   * ************************************************************************/
-  // Reset cache intervals
-  CachedInterval::resetAll();
-  // Release all the ADOdb connections.
-  YapealDBConnection::releaseAll();
-}
-catch (Exception $e) {
-  $mess = 'Uncaught exception in ' . basename(__FILE__);
-  Logger::getLogger('yapeal')->fatal($mess);
-  Logger::getLogger('yapeal')->fatal($e);
-  exit(1);
-}
-exit(0);
+namespace Yapeal;
 
+use Doctrine\DBAL;
+use Yapeal\Configuration as CFG;
+use Yapeal\Network as NET;
+use Yapeal\Database as DB;
+
+/**
+ * Class Yapeal is used to get information from Eve-online API and store in to a database.
+ *
+ * This is the main class that is needed to use Yapeal.
+ *
+ * The Yapeal class expects that a suitable PSR-0 compatible auto-loader is being used that will look in it's current
+ * installed location and make available the other packages from the vendor directory. Composer's default one which you
+ * can find in vendor/autoload.php works.
+ *
+ * @since 1.9.0-alpha Initial alpha release done to get feedback on what will because version 2.0.0.
+ * @version 1.9.0-alpha Initial alpha release done to get feedback on what will because version 2.0.0.
+ */
+class Yapeal
+{
+    /**
+     * @var CFG\ConfigurationInterface Holds main configuration.
+     */
+    private $configuration;
+    /**
+     * @var DB\DatabaseInterface Holds main database connection.
+     */
+    private $database;
+    /**
+     * @var int Holds the soft limit used to keep Yapeal from overloading servers.
+     */
+    private $executeSoftLimit;
+    /**
+     * @var NET\NetworkInterface Holds main network connection.
+     */
+    private $network;
+    /**
+     * Holds GMT date-time Yapeal started
+     *
+     * This is use to have the same time on all APIs that error out and need to be tried again.
+     * @var string
+     */
+    private $savedStartTime;
+    /**
+     * @param CFG\ConfigurationInterface $config
+     * @param DB\DatabaseInterface       $db
+     * @param NET\NetworkInterface       $fetcher
+     *
+     * @throws \RuntimeException
+     */
+    public function __construct(
+        CFG\ConfigurationInterface $config = null,
+        DB\DatabaseInterface $db = null,
+        NET\NetworkInterface $fetcher = null
+    ) {
+        $tz = date_default_timezone_get();
+        if ($tz !== 'UTC') {
+            $mess = "Yapeal requires that PHP's timezone be set to UTC";
+            throw new \RuntimeException($mess);
+        }
+        $this->configuration = $config;
+        $this->database = $db;
+        $this->network = $fetcher;
+    }
+    public function configure()
+    {
+        if (isset($this->configuration)) {
+            $this->configuration->fetchConfiguration();
+        }
+        return $this;
+    }
+    public function getDatabaseConnection()
+    {
+        $config = new DBAL\Configuration();
+        $connectionParams = array();
+    }
+    public function run()
+    {
+        if (empty($this->database)) {
+            $mess =
+                'Database connection is needed before Yapeal::run() can be called';
+            throw new \LogicException($mess);
+        }
+        if (empty($this->network)) {
+            $mess =
+                'Network connection is needed before Yapeal::run() can be called';
+            throw new \LogicException($mess);
+        }
+        $this->executeSoftLimit = strtotime('10 minutes');
+        $this->savedStartTime = gmdate('Y-m-d H:i:s', $this->executeSoftLimit);
+        print 'Works!' . PHP_EOL;
+        return $this;
+    }
+    /**
+     * @param CFG\ConfigurationInterface $value
+     *
+     * @return self
+     */
+    public function setConfiguration(CFG\ConfigurationInterface $value)
+    {
+        $this->configuration = $value;
+        return $this;
+    }
+    /**
+     * @param DB\DatabaseInterface $database
+     *
+     * @return self
+     */
+    public function setDatabase(DB\DatabaseInterface $database)
+    {
+        $this->database = $database;
+        return $this;
+    }
+    /**
+     * @param NET\NetworkInterface $network
+     *
+     * @return self
+     */
+    public function setNetwork(NET\NetworkInterface $network)
+    {
+        $this->network = $network;
+        return $this;
+    }
+}

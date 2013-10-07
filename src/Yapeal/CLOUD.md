@@ -10,11 +10,11 @@ Since I've started Yapeal the most common problems people seem to have is
 finding good hosting with up to date software that don't over commit their
 servers which can cause multiple issues for something like Yapeal which doesn't
 have the same requirements as a normal webserver. Many people try to use the
-bottom teir web server services which put anywhere from 2-5x more web sites per
+bottom tiered web server services which put anywhere from 2-5x more web sites per
 server as they can truly handle. They also configure them for high output
 network bandwidth but little incoming as most sites spend most of their time
 serving web pages and not downloading new data. Yapeal downloads a lot of data
-from the API servers and uses very little outgoing bandwidth since it more like
+from the API servers and uses very little outgoing bandwidth since it's more like
 a client then a server.
 
 ## About the instance
@@ -36,7 +36,7 @@ SUSE Studio
 ## Securing database
 
 The first thing you need to do is secure the MySQL (MariaDB) server by setting a
-root pasword, removing the anonumous users, disallow remote root logins, remove
+root password, removing the anonymous users, disallow remote root logins, remove
 the test database and access to it. This can all be done by the Linux root user
 running:
 
