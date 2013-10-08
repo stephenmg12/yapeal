@@ -1,8 +1,8 @@
 {
-    "name":        "yapeal/yapeal",
-    "description": "Yet Another Php Eve Api Library",
-    "license":     "LGPL-3.0+",
-    "authors":     [
+    "name":              "yapeal/yapeal",
+    "description":       "Yet Another Php Eve Api Library",
+    "license":           "LGPL-3.0+",
+    "authors":           [
         {
             "name":  "Michael Cummings",
             "email": "dragonaire@users.sourceforge.net",
@@ -14,12 +14,14 @@
             "role":  "Developer"
         }
     ],
-    "support":     {
+    "homepage":          "https://sourceforge.net/p/yapeal/wiki/Home/",
+    "type":              "project",
+    "support":           {
         "issues": "https://sourceforge.net/p/yapeal/tickets/",
         "source": "https://sourceforge.net/projects/yapeal/files/",
         "wiki":   "https://sourceforge.net/p/yapeal/wiki/Home/"
     },
-    "require":     {
+    "require":           {
         "doctrine/dbal":                "2.4.*@dev",
         "doctrine/migrations":          "dev-master",
         "doctrine/orm":                 "2.4.*@dev",
@@ -46,21 +48,21 @@
         "symfony/filesystem":           "2.4.*@dev",
         "symfony/yaml":                 "2.4.*@dev"
     },
-    "require-dev": {
+    "require-dev":       {
         "behat/behat":                 "2.5.*@dev",
         "ext-xsl":                     "*",
         "phpdocumentor/phpdocumentor": "dev-develop",
         "phpunit/phpunit":             "3.7.*@dev",
-        "phpunit/dbunit": ">=1.2",
-        "phpunit/php-invoker": "*",
+        "phpunit/dbunit":              ">=1.2",
+        "phpunit/php-invoker":         "*",
         "twig/twig":                   "v1.13.2"
     },
-    "autoload":    {
+    "autoload":          {
         "psr-0": {
             "Yapeal\\": "src/",
-            "": "src/"
+            "":         "src/"
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable" : true
+    "prefer-stable":     true
 }
