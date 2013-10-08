@@ -46,16 +46,21 @@
         "symfony/filesystem":           "2.4.*@dev",
         "symfony/yaml":                 "2.4.*@dev"
     },
-    "autoload":    {
-        "psr-0": {
-            "Yapeal\\": "src/"
-        }
-    },
     "require-dev": {
         "behat/behat":                 "2.5.*@dev",
         "ext-xsl":                     "*",
         "phpdocumentor/phpdocumentor": "dev-develop",
         "phpunit/phpunit":             "3.7.*@dev",
+        "phpunit/dbunit": ">=1.2",
+        "phpunit/php-invoker": "*",
         "twig/twig":                   "v1.13.2"
-    }
+    },
+    "autoload":    {
+        "psr-0": {
+            "Yapeal\\": "src/",
+            "": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable" : true
 }

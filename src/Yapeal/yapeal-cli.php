@@ -54,6 +54,8 @@ if (count($included) > 1 || $included[0] != __FILE__) {
     fwrite(STDERR, $mess);
     exit(1);
 };
-require_once dirname(dirname(dirname(__FILE__))) . '/vendor/autoload.php';
+if (false === strpos(___DIR__, 'vendor/')) {
+    require_once dirname(dirname(dirname(__FILE__))) . '/vendor/autoload.php';
+}
 $yapeal = new Yapeal();
 $yapeal->configure()->run();
