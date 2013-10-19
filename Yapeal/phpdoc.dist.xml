@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <files>
+        <directory>.</directory>
+        <ignore>docs/*</ignore>
+        <ignore>junk.php</ignore>
+        <ignore>test.php</ignore>
+        <ignore>tests/*</ignore>
+        <ignore>vendor/*</ignore>
+    </files>
+    <parser default-package-name="Yapeal 2">
+        <target>docs/output</target>
+    </parser>
+    <title>Yapeal 2</title>
+    <transformations>
+        <template name="responsive"/>
+    </transformations>
+    <transformer>
+        <target>docs/html</target>
+    </transformer>
+</phpdoc>

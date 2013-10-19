@@ -12,7 +12,7 @@ cache/eve/*.xml
 cache/map/*.xml
 cache/server/*.xml
 config/yapeal.ini
-log/*.log
+logs/*.log
 export/
 upload/
 vendor/
