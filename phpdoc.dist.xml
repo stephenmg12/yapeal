@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdoc>
     <files>
-        <directory>./Yapeal</directory>
-        <ignore>docs/*</ignore>
+        <directory>Yapeal</directory>
+        <file>Yapeal/Yapeal.php</file>
+        <ignore>Yapeal/docs/*</ignore>
         <ignore>junk.php</ignore>
         <ignore>test.php</ignore>
-        <ignore>Tests/*</ignore>
-        <ignore>vendor/*</ignore>
+        <ignore>Yapeal/Tests/*</ignore>
+        <ignore>Yapeal/vendor/*</ignore>
         <ignore>yapeal-cli.php</ignore>
-        <ignore>bootstrap.php</ignore>
-        <ignore>cli-config.php</ignore>
+        <ignore>Yapeal/bootstrap.php</ignore>
+        <ignore>Yapeal/cli-config.php</ignore>
     </files>
     <parser default-package-name="Yapeal 2">
         <target>Yapeal/docs/cache</target>
