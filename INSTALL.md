@@ -1,10 +1,15 @@
 # INSTALLATION #
 
-Below are the instructions for installing [Yapeal][1] from the archives but you
+Below are the instructions for installing [Yapeal][1] with Composer but you
 can find instructions about installing from the [Mercurial][2] as well after
 them. Only the first couple of steps are different.
 
-## Installing From Archives
+## Installing with Composer
+
+***Instructions coming soon!!!**
+If you have used composer before you can find Yapeal on Packagist.
+
+## <s>Installing From Archives</s> *(Deprecated!)*
 
 If you are installing from one of the [archives][3] (tar.bz2, zip) the following
 instructions should be helpful. In most of the general text I will mostly use
@@ -246,7 +251,7 @@ information to the utilRegistered* tables in the database for any of the
 account, char, or corp APIs to work. More information about adding information
 and activating APIs can be found in the wiki and on the forum thread.
 
-## Installing From Mercurial
+## Installing From Mercurial *(Outdated!)*
 
 To install from the Mercurial repository on GoogleCode or SourceForge first
 setup a working copy. This shouldn't be where you plan on run Yapeal from but be

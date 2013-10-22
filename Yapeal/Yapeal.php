@@ -1,6 +1,6 @@
 <?php
 /**
- * Contains Yapeal class
+ * Contains Yapeal class.
  *
  * PHP version 5.3
  *
@@ -44,13 +44,15 @@ use Yapeal\Filesystem\Finder;
 use Yapeal\Network as NET;
 
 /**
- * Class Yapeal is used to get information from Eve-online API and store in to a database.
+ * Class Yapeal is used to get information from Eve Online API and store in to a
+ * database.
  *
  * This is the main class that is needed to use Yapeal.
  *
- * The Yapeal class expects that a suitable PSR-0 compatible auto-loader is being used that will look in it's current
- * installed location and make available the other packages from the vendor directory. Composer's default one which you
- * can find in vendor/autoload.php works.
+ * The Yapeal class expects that a suitable PSR-0 compatible auto-loader is
+ * being used that will look in it's current installed location and make
+ * available the other packages from the vendor directory. Composer's default
+ * one which you can find in vendor/autoload.php works.
  *
  * @package Yapeal
  */

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdoc>
     <files>
-        <directory>.</directory>
+        <directory>./Yapeal</directory>
         <ignore>docs/*</ignore>
         <ignore>junk.php</ignore>
         <ignore>test.php</ignore>
@@ -12,13 +12,13 @@
         <ignore>cli-config.php</ignore>
     </files>
     <parser default-package-name="Yapeal 2">
-        <target>docs/cache</target>
+        <target>Yapeal/docs/cache</target>
     </parser>
     <title>Yapeal 2</title>
     <transformations>
         <template name="new-black"/>
     </transformations>
     <transformer>
-        <target>docs/html</target>
+        <target>Yapeal/docs/html</target>
     </transformer>
 </phpdoc>

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="../vendor/autoload.php"
+<phpunit bootstrap="vendor/autoload.php"
     colors="true"
-    printerFile="../vendor/whatthejeff/nyancat-phpunit-resultprinter/src/NyanCat/PHPUnit/ResultPrinter.php"
+    printerFile="vendor/whatthejeff/nyancat-phpunit-resultprinter/src/NyanCat/PHPUnit/ResultPrinter.php"
     printerClass="NyanCat\PHPunit\ResultPrinter"
     processIsolation="false"
     stopOnError="true"
     stopOnFailure="true">
     <logging>
         <log type="coverage-html"
-            target="docs/reports"
+            target="Yapeal/docs/reports"
             charset="UTF-8"
             highlight="true"
             lowUpperBound="35"
             highLowerBound="70"/>
-        <log type="testdox-html" target="docs/reports/testdox.html"/>
-        <log type="testdox-text" target="docs/reports/testdox.txt"/>
+        <log type="testdox-html" target="Yapeal/docs/reports/testdox.html"/>
+        <log type="testdox-text" target="Yapeal/docs/reports/testdox.txt"/>
     </logging>
     <testsuites>
         <testsuite name="Main">
-            <directory>Tests/Yapeal</directory>
-            <exclude>vendor/</exclude>
+            <directory>Yapeal/Tests</directory>
+            <exclude>vendor</exclude>
         </testsuite>
     </testsuites>
 </phpunit>
