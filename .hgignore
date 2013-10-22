@@ -1,9 +1,7 @@
 syntax: glob
 .hgsub
+.idea/
 *.komodoproject
-composer.phar
-test.php
-junk.php
 cache/account/*.xml
 cache/ADOdb/*.sql
 cache/char/*.xml
@@ -11,11 +9,14 @@ cache/corp/*.xml
 cache/eve/*.xml
 cache/map/*.xml
 cache/server/*.xml
+composer.phar
 config/yapeal.ini
-logs/*.log
+config/yapeal.json
+docs/
 export/
+junk.php
+logs/
+phpdoc.xml
+test.php
 upload/
 vendor/
-docs/
-.idea/
-config/yapeal.ini

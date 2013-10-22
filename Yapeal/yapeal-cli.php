@@ -1,4 +1,4 @@
-#!/usr/bin/php -Cq
+#!/usr/bin/env php
 <?php
 /**
  * Command line interface caller for using Yapeal class.
@@ -54,11 +54,11 @@ if (count($included) > 1 || $included[0] != __FILE__) {
     fwrite(STDERR, $mess);
     exit(1);
 };
-if (false === strpos(__DIR__, '/vendor')) {
-    require_once dirname(__DIR__) . '/vendor/autoload.php';
-} else {
-    require_once dirname(__DIR__) . '/autoload.php';
+$path = dirname(__DIR__);
+while (false !== strpos($path, '/vendor')) {
+    $path = dirname($path);
 }
+require_once $path . '/vendor/autoload.php';
 $yapeal = new Yapeal();
 $yapeal
     ->configure()

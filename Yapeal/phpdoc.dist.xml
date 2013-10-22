@@ -5,15 +5,18 @@
         <ignore>docs/*</ignore>
         <ignore>junk.php</ignore>
         <ignore>test.php</ignore>
-        <ignore>tests/*</ignore>
+        <ignore>Tests/*</ignore>
         <ignore>vendor/*</ignore>
+        <ignore>yapeal-cli.php</ignore>
+        <ignore>bootstrap.php</ignore>
+        <ignore>cli-config.php</ignore>
     </files>
     <parser default-package-name="Yapeal 2">
-        <target>docs/output</target>
+        <target>docs/cache</target>
     </parser>
     <title>Yapeal 2</title>
     <transformations>
-        <template name="responsive"/>
+        <template name="new-black"/>
     </transformations>
     <transformer>
         <target>docs/html</target>

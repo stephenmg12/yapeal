@@ -63,7 +63,7 @@
         "phpdocumentor/template-checkstyle":         "1.2.0",
         "phpdocumentor/template-xml":                "1.2.0",
         "phpdocumentor/graphviz":                    "1.0.0",
-        "phpdocumentor/phpdocumentor":               "dev-develop",
+        "phpdocumentor/phpdocumentor":               "v2.1.0",
         "phpunit/phpunit":                           "3.7.*@dev",
         "phpunit/dbunit":                            ">=1.2",
         "phpunit/php-invoker":                       "*",

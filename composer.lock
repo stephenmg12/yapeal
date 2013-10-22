@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "769ec082736425558717da4e4000bad6",
+    "hash": "1675ebe75c1436bf3305e992c60c7812",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2192,16 +2192,16 @@
         },
         {
             "name": "phpdocumentor/phpdocumentor",
-            "version": "dev-develop",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/phpDocumentor2.git",
-                "reference": "5f0484d71dcafd9a7a3d09a93bd94ba1c8cde523"
+                "reference": "c8ef5f86510b0864ce272efc4917b63c4fbb1849"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/phpDocumentor2/zipball/5f0484d71dcafd9a7a3d09a93bd94ba1c8cde523",
-                "reference": "5f0484d71dcafd9a7a3d09a93bd94ba1c8cde523",
+                "url": "https://api.github.com/repos/phpDocumentor/phpDocumentor2/zipball/c8ef5f86510b0864ce272efc4917b63c4fbb1849",
+                "reference": "c8ef5f86510b0864ce272efc4917b63c4fbb1849",
                 "shasum": ""
             },
             "require": {
@@ -2273,7 +2273,7 @@
                 "documentation",
                 "phpdoc"
             ],
-            "time": "2013-10-14 17:42:54"
+            "time": "2013-10-14 17:46:58"
         },
         {
             "name": "phpdocumentor/reflection",
@@ -4210,7 +4210,6 @@
         "symfony/yaml": 20,
         "sebastian/phpcpd": 20,
         "behat/behat": 20,
-        "phpdocumentor/phpdocumentor": 20,
         "phpunit/phpunit": 20,
         "whatthejeff/nyancat-phpunit-resultprinter": 20
     },

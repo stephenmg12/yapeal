@@ -1,0 +1,23 @@
+{
+    "yapeal": {
+        "application_agent": "",
+        "Cache":             {
+            "interval": 7,
+            "to":       "file",
+            "dir":      "{libraryBase}/cache"
+        },
+        "Logging":           {
+            "locale": "en_US",
+            "level":  32767,
+            "dir":    "{libraryBase}/logs"
+        },
+        "registered_mode":   "optional",
+        "Database":          {
+            "user":     "YapealUser",
+            "host":     "localhost",
+            "password": "secret",
+            "database": "yapeal",
+            "prefix":   "mysql"
+        }
+    }
+}

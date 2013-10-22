@@ -32,14 +32,33 @@ namespace Yapeal\Filesystem;
  */
 class Finder
 {
+    /**
+     * Static only class
+     */
     final private function __construct()
     {
         throw new \LogicException('Static only class');
     }
-    public static function getLibraryBasePath()
-    {
-        return dirname(__DIR__);
+    /**
+     * @param string $path
+     * @param string $library
+     *
+     * @return string
+     */
+    public static function getLibraryBasePath(
+        $path = __DIR__,
+        $library = '/Yapeal'
+    ) {
+        while (false !== strpos($path, $library)) {
+            $path = dirname($path);
+        }
+        return $path . $library;
     }
+    /**
+     * @param string $file
+     *
+     * @return string
+     */
     public static function getPathOfVendorParent($file = __FILE__)
     {
         $path = dirname($file);
@@ -48,19 +67,50 @@ class Finder
         }
         return $path;
     }
-    public static function hasVendorParent($dir = __FILE__)
+    /**
+     * @return string
+     */
+    public static function getPathOfVendorParentOrLibraryBase()
     {
-        $dir = dirname($dir);
-        return (false !== strpos($dir, '/vendor')) ? true : false;
+        $path = self::getLibraryBasePath();
+        while (self::hasVendorParent($path)) {
+            $path = dirname($path);
+        }
+        return $path;
     }
+    /**
+     * @param string $file
+     *
+     * @return bool
+     */
+    public static function hasVendorParent($file = __FILE__)
+    {
+        $path = dirname($file);
+        return (false !== strpos($path, '/vendor')) ? true : false;
+    }
+    /**
+     * Static only class
+     *
+     * @throws \LogicException
+     */
     final private function __clone()
     {
         throw new \LogicException('Static only class');
     }
+    /**
+     * Static only class
+     *
+     * @throws \LogicException
+     */
     final private function __invoke()
     {
         throw new \LogicException('Static only class');
     }
+    /**
+     * Static only class
+     *
+     * @throws \LogicException
+     */
     final private function __wakeup()
     {
         throw new \LogicException('Static only class');

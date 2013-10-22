@@ -43,33 +43,32 @@ class Configuration implements ConfigurationInterface, LoggerAwareInterface
      */
     private $configFiles;
     /**
+     * @var string
+     */
+    private $libraryBase;
+    /**
      * @var LoggerInterface
      */
     private $logger;
     /**
-     * @var string[]
+     * @var string
      */
-    private $searchFiles = array();
+    private $vendorParent;
     /**
-     * @var string[]
-     */
-    private $searchPaths = array();
-    /**
-     * @param string|string[]|null $searchPaths     Paths to used when looking for
-     *                                              config files if null use defaults.
-     * @param string|string[]|null $files           Configuration files to look for
-     *                                              if null use defaults.
-     * @param LoggerInterface      $logger
+     * @param string|string[]|null     $files                       Configuration files to look for
+     *                                                              if null use defaults.
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param string                   $libraryBase
      *
      * @return \Yapeal\Configuration\Configuration
      */
     public function __construct(
-        $searchPaths = null,
         $files = null,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        $libraryBase = __DIR__
     ) {
+        $this->setLibraryBase($libraryBase);
         $this->setLogger($logger);
-        $this->setSearchPaths($searchPaths);
         $this->setConfigFiles($files);
     }
     /**
@@ -78,6 +77,7 @@ class Configuration implements ConfigurationInterface, LoggerAwareInterface
      * @param string|string[] $files
      *
      * @return self
+     * @uses Configuration::getCleanPath() Configuration::getCleanPath()
      */
     public function addConfigFiles($files)
     {
@@ -91,62 +91,22 @@ class Configuration implements ConfigurationInterface, LoggerAwareInterface
         }
         foreach ($files as $file) {
             if (!is_string($file)) {
-                $mess = '$files must contain strings only it can not have a(n) ';
+                $mess =
+                    '$files must contain strings only it can not have a(n) ';
                 $mess .= gettype($file);
                 $this->logger->log(LogLevel::WARNING, $mess);
                 continue;
             }
-            // If plain file name ...
-            if (false === strpos($file, '/')) {
-                $this->searchFiles[] = $file;
-                continue;
-            }
-            $path = dirname($file);
-            $fileName = basename($file);
-            $path = $this->getCleanPath($path);
+            $path = $this->getCleanPath(dirname($file));
             if (false === $path) {
                 continue;
             }
-            $file = $path . '/' . $fileName;
+            $file = $path . DIRECTORY_SEPARATOR . basename($file);
             if (file_exists($file) && is_file($file) && is_readable($file)) {
                 $this->configFiles[] = $file;
             }
         }
-        $this->searchFiles = array_merge(array_unique($this->searchFiles));
         $this->configFiles = array_merge(array_unique($this->configFiles));
-        return $this;
-    }
-    /**
-     * Used to add additional filesystem paths to search for config files in.
-     *
-     * @param string|string[] $paths
-     *
-     * @return self
-     */
-    public function addSearchPaths($paths)
-    {
-        if (is_string($paths)) {
-            $paths = (array)$paths;
-        } elseif (!is_array($paths)) {
-            $mess = '$paths must be a string or an array it can not be a(n) ';
-            $mess .= gettype($paths);
-            $this->logger->log(LogLevel::WARNING, $mess);
-            return $this;
-        }
-        foreach ($paths as $path) {
-            if (!is_string($path)) {
-                $mess = '$paths must contain strings only it can not have a(n) ';
-                $mess .= gettype($path);
-                $this->logger->log(LogLevel::WARNING, $mess);
-                continue;
-            }
-            $cleanPath = $this->getCleanPath($path);
-            if (false === $cleanPath) {
-                continue;
-            }
-            $this->searchPaths[] = $cleanPath;
-        }
-        $this->searchPaths = array_merge(array_unique($this->searchPaths));
         return $this;
     }
     /**
@@ -163,12 +123,33 @@ class Configuration implements ConfigurationInterface, LoggerAwareInterface
     {
         $this->configFiles = array();
         if (is_null($files)) {
-            $this->searchFiles = array('yapeal.ini', 'yapeal.json');
-            return $this;
-        } else {
-            $this->searchFiles = array();
+            $ds = DIRECTORY_SEPARATOR;
+            $files = array(
+                $this->libraryBase
+                . "${ds}Configuration$ds}yapeal-template.json",
+                $this->libraryBase . "${ds}config${ds}yapeal.ini",
+                $this->libraryBase . "${ds}config${ds}yapeal.json",
+                $this->vendorParent . "${ds}config${ds}yapeal.ini",
+                $this->vendorParent . "${ds}config${ds}yapeal.json"
+            );
         }
         return $this->addConfigFiles($files);
+    }
+    /**
+     * @param mixed  $path
+     * @param string $library
+     *
+     * @return self
+     */
+    public function setLibraryBase($path = __DIR__, $library = 'Yapeal')
+    {
+        $library = DIRECTORY_SEPARATOR . $library;
+        while (false !== strpos((string)$path, $library)) {
+            $path = dirname($path);
+        }
+        $this->libraryBase = $path . $library;
+        $this->setVendorParent($path);
+        return $this;
     }
     /**
      * @param LoggerInterface $logger
@@ -183,56 +164,76 @@ class Configuration implements ConfigurationInterface, LoggerAwareInterface
         $this->logger = $logger;
     }
     /**
-     * Sets the filesystem paths used when searching for configuration files.
-     *
-     * @param string|string[]|null $paths Paths to used when looking for config
-     *                                    files if null use defaults.
+     * @param string $path
+     * @param string $vendor
      *
      * @return self
-     * @throws \InvalidArgumentException Throw exception if $paths is incorrect
-     * type.
      */
-    public function setSearchPaths($paths = null)
+    public function setVendorParent($path, $vendor = 'vendor')
     {
-        $this->searchPaths = array();
-        if (is_null($paths)) {
-            $this->searchPaths =
-                array(Finder::getLibraryBasePath() . '/config');
-            if (Finder::hasVendorParent()) {
-                $this->searchPaths[] =
-                    Finder::getPathOfVendorParent() . '/config';
-            }
-            return $this;
+        $vendor = DIRECTORY_SEPARATOR . $vendor;
+        while (false !== strpos($path, $vendor)) {
+            $path = dirname($path);
         }
-        return $this->addSearchPaths($paths);
+        $this->vendorParent = $path;
+        return $this;
     }
     /**
      * Get a cleaned up full path.
      *
      * The method understands URI style templates but only for '{libraryBase}'
-     * and '{vendorParent}'
+     * or '{vendorParent}' at the beginning of the path.
+     *
+     * Some examples:
+     * <pre>
+     * $path = '{libraryBase}/config';
+     * $path = '{vendorParent}/config';
+     * </pre>
+     *
+     * The following examples would NOT be allowed:
+     * <pre>
+     * // {vendorParent} | {libraryBase} NOT both at same time.
+     * $path = '{vendorParent}/{libraryBase}/config/dir';
+     * // Can NOT use URI template anywhere but at start.
+     * $path = 'dir/{libraryBase}/more/dir';
+     * // Up directory paths NOT allowed.
+     * $path = '../../no-way';
+     * // Absolute paths NOT allowed either.
+     * $path = '/Yapeal/not-happening';
+     * // Unknown URI templates NOT allowed.
+     * $path = '{myTemplate}/no-no'
+     * </pre>
      *
      * @param string $path
      *
      * @return string|bool
      * @uses \Yapeal\Filesystem\Finder
-     * @link http://tools.ietf.org/html/rfc6570
+     * @link http://tools.ietf.org/html/rfc6570 URI Templates
      */
     protected function getCleanPath($path)
     {
-        $firstChar = substr($path, 0, 1);
-        if ($firstChar == '/' || strpos($path, '../') !== false) {
+        $ds = DIRECTORY_SEPARATOR;
+        if (substr($path, 0, 1) == $ds) {
+            $mess = '$path can NOT be absolute';
+            $this->logger->log(LogLevel::WARNING, $mess);
             return false;
         }
-        $search = array('{libraryBase}/', '{vendorParent}/');
-        $replace = array(Finder::getLibraryBasePath() . '/');
-        if (Finder::hasVendorParent()) {
-            $replace[] = Finder::getPathOfVendorParent() . '/';
-        } else {
-            $replace[] = $replace[0];
+        if (strpos($path, "..$ds") !== false) {
+            $mess = '$path can NOT contain up directory reference';
+            $this->logger->log(LogLevel::WARNING, $mess);
+            return false;
         }
+        $search = array("{libraryBase}$ds", "{vendorParent}$ds");
+        $replace = array($this->libraryBase . $ds, $this->vendorParent . $ds);
         $path = str_replace($search, $replace, $path, $count);
-        if ($count > 1 || strpos($path, '{') !== false) {
+        if ($count > 1) {
+            $mess = '$path can NOT contain more than one URI template';
+            $this->logger->log(LogLevel::WARNING, $mess);
+            return false;
+        }
+        if (strpos($path, '{') !== false && strpos($path, '}') !== false) {
+            $mess = '$path can NOT contain unknown URI templates';
+            $this->logger->log(LogLevel::WARNING, $mess);
             return false;
         }
         return $path;

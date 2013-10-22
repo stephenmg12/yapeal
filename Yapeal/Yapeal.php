@@ -4,18 +4,24 @@
  *
  * PHP version 5.3
  *
- * LICENSE: This file is part of Yet Another Php Eve Api library also know as Yapeal which will be used to refer to it
- * in the rest of this license.
+ * LICENSE:
+ * This file is part of Yet Another Php Eve Api Library also know as Yapeal which can be used to access the Eve Online
+ * API data and place it into a database.
+ * Copyright (C) 2013  Michael Cummings
  *
- * Yapeal is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
  *
- * Yapeal is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
- * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU Lesser General Public License along with Yapeal. If not, see
+ * You should have received a copy of the GNU Lesser General Public License along with this program. If not, see
  * <http://www.gnu.org/licenses/>.
+ *
+ * You should be able to find a copy of this license in the LICENSE.md file. A copy of the GNU GPL should also be
+ * available in the GNU-GPL.md file.
  *
  * @author    Michael Cummings <mgcummings@yahoo.com>
  * @copyright 2013 Michael Cummings
@@ -29,6 +35,9 @@
 namespace Yapeal;
 
 use Doctrine\DBAL;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Yapeal\Configuration as CFG;
 use Yapeal\Database as DB;
 use Yapeal\Filesystem\Finder;
@@ -45,7 +54,7 @@ use Yapeal\Network as NET;
  *
  * @package Yapeal
  */
-class Yapeal
+class Yapeal implements LoggerAwareInterface
 {
     private static $version;
     /**
@@ -60,6 +69,10 @@ class Yapeal
      * @var int Holds the soft limit used to keep Yapeal from overloading servers.
      */
     private $executeSoftLimit;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
     /**
      * @var NET\NetworkInterface Holds main network connection.
      */
@@ -82,19 +95,18 @@ class Yapeal
     public function __construct(
         CFG\ConfigurationInterface $config = null,
         DB\DatabaseInterface $db = null,
-        NET\NetworkInterface $fetcher = null
+        NET\NetworkInterface $fetcher = null,
+        LoggerInterface $logger = null
     ) {
         $tz = date_default_timezone_get();
         if ($tz !== 'UTC') {
             $mess = "Yapeal requires that PHP's timezone be set to UTC";
             throw new \RuntimeException($mess);
         }
-        if (is_null($config)) {
-            $config = new CFG\Configuration();
-        }
-        $this->configuration = $config;
-        $this->database = $db;
-        $this->network = $fetcher;
+        $this->setLogger($logger);
+        $this->setConfiguration($config);
+        $this->setDatabase($db);
+        $this->setNetwork($fetcher);
     }
     /**
      * Returns the version info string for Yapeal.
@@ -146,31 +158,46 @@ class Yapeal
         return $this;
     }
     /**
-     * @param CFG\ConfigurationInterface $value
+     * @param CFG\ConfigurationInterface|null $config
      *
      * @return self
      */
-    public function setConfiguration(CFG\ConfigurationInterface $value)
+    public function setConfiguration(CFG\ConfigurationInterface $config = null)
     {
-        $this->configuration = $value;
+        if (is_null($config)) {
+            $config = new CFG\Configuration($this->logger);
+        }
+        $this->configuration = $config;
         return $this;
     }
     /**
-     * @param DB\DatabaseInterface $database
+     * @param DB\DatabaseInterface|null $database
      *
      * @return self
      */
-    public function setDatabase(DB\DatabaseInterface $database)
+    public function setDatabase(DB\DatabaseInterface $database = null)
     {
         $this->database = $database;
         return $this;
     }
     /**
-     * @param NET\NetworkInterface $network
+     * @param LoggerInterface|null $logger
+     *
+     * @return null|void
+     */
+    public function setLogger(LoggerInterface $logger = null)
+    {
+        if (is_null($logger)) {
+            $logger = new NullLogger();
+        }
+        $this->logger = $logger;
+    }
+    /**
+     * @param NET\NetworkInterface|null $network
      *
      * @return self
      */
-    public function setNetwork(NET\NetworkInterface $network)
+    public function setNetwork(NET\NetworkInterface $network = null)
     {
         $this->network = $network;
         return $this;

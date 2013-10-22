@@ -3,7 +3,9 @@
     colors="true"
     printerFile="../vendor/whatthejeff/nyancat-phpunit-resultprinter/src/NyanCat/PHPUnit/ResultPrinter.php"
     printerClass="NyanCat\PHPunit\ResultPrinter"
-    processIsolation="false">
+    processIsolation="false"
+    stopOnError="true"
+    stopOnFailure="true">
     <logging>
         <log type="coverage-html"
             target="docs/reports"

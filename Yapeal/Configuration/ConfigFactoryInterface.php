@@ -1,6 +1,6 @@
 <?php
 /**
- * Contains Configuration Interface
+ * Contains ConfigFactory Interface
  *
  * PHP version 5.3
  *
@@ -26,29 +26,10 @@
 namespace Yapeal\Configuration;
 
 /**
- * Interface ConfigurationInterface
+ * Interface ConfigFactoryInterface
  *
  * @package Yapeal\Configuration
  */
-interface ConfigurationInterface
+interface ConfigFactoryInterface
 {
-    /**
-     * Add one or more names of configuration files to be looked for and used.
-     *
-     * @param string|string[] $files
-     *
-     * @return self
-     */
-    public function addConfigFiles($files);
-    /**
-     * Set the name or names of configuration files to be looked for and used.
-     *
-     * @param string|string[] $files Files to use if null use defaults.
-     *
-     * @return self
-     */
-    public function setConfigFiles($files = null);
-    /**
-     *
-     */
 }

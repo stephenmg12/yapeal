@@ -1,161 +1,245 @@
 <?php
 namespace Yapeal\Tests\Yapeal\Configuration;
 
+use org\bovigo\vfs as VFS;
 use PHPUnit_Framework_TestCase;
 use Yapeal\Configuration\Configuration;
 use Yapeal\Filesystem\Finder;
 
 class ConfigurationTest extends PHPUnit_Framework_TestCase
 {
-    public function testAddConfigFilesWhenFilesIsArray()
+    /**
+     * @var string
+     */
+    private $libraryPath;
+    /**
+     * @var VFS\vfsStreamContent
+     */
+    private $vfs;
+    public function setUp()
     {
-        $expectedResult = 'test.xml';
-        $config = new Configuration();
-        $config->addConfigFiles((array)$expectedResult);
-        $this->assertAttributeContains($expectedResult, 'searchFiles', $config);
-    }
-    public function testAddConfigFilesWhenFilesIsString()
-    {
-        $expectedResult = 'test.xml';
-        $config = new Configuration();
-        $config->addConfigFiles($expectedResult);
-        $this->assertAttributeContains($expectedResult, 'searchFiles', $config);
-    }
-    public function testAddSearchPathsWhenPathsIsArray()
-    {
-        $expectedResult = 'test';
-        $config = new Configuration();
-        $config->addSearchPaths((array)$expectedResult);
-        $this->assertAttributeContains($expectedResult, 'searchPaths', $config);
-    }
-    public function testAddSearchPathsWhenPathsIsString()
-    {
-        $expectedResult = 'test';
-        $config = new Configuration();
-        $config->addSearchPaths($expectedResult);
-        $this->assertAttributeContains($expectedResult, 'searchPaths', $config);
-    }
-    public function testConstructorFilesParamIsArray()
-    {
-        $expectedResult = array('yapeal.ini', 'yapeal.json');
-        $config = new Configuration(null, $expectedResult);
-        $this->assertAttributeEquals($expectedResult, 'searchFiles', $config);
-    }
-    public function testConstructorFilesParamIsInvalidType()
-    {
-        //$this->setExpectedException('InvalidArgumentException');
-        $expectedResult = 1.0;
-        $config = new Configuration(null, $expectedResult);
-        $this->assertAttributeNotContains(
-            $expectedResult,
-            'searchFiles',
-            $config
+        $yapealTemplate = file_get_contents(
+            __DIR__ . '../../../../Configuration/yapeal-template.json'
         );
-    }
-    public function testConstructorFilesParamIsString()
-    {
-        $expectedResult = array('yapeal.ini');
-        $config = new Configuration(null, 'yapeal.ini');
-        $this->assertAttributeEquals($expectedResult, 'searchFiles', $config);
-    }
-    public function testConstructorParamsAreNull()
-    {
-        $expectedFilesResult = array('yapeal.ini', 'yapeal.json');
-        $base = dirname(dirname(dirname(__DIR__)));
-        $expectedSearchPathsResult = $base . '/config';
-        $config = new Configuration();
-        $this->assertAttributeEquals(
-            $expectedFilesResult,
-            'searchFiles',
-            $config
+        $structure = array(
+            'Yapeal' => array(
+                'config' => array(
+                    'yapeal.ini' => 'bogus',
+                    'yapeal.json' => 'bogus',
+                    'yapeal-example.json' => 'bogus'
+                ),
+                'Configuration' => array(
+                    'yapeal-template.json' => $yapealTemplate,
+                    'yapeal-schema.json' => 'bogus'
+                )
+            ),
+            'config' => array(
+                'yapeal.json' => 'bogus'
+            )
         );
-        $this->assertAttributeContains(
-            $expectedSearchPathsResult,
-            'searchPaths',
-            $config
-        );
+        $this->vfs = VFS\vfsStream::setup('phpUnit', null, $structure);
+        $this->libraryPath = $this->vfs->url() . '/Yapeal/Configuration';
     }
-    public function testConstructorPathsParamIsArray()
+    public function testAddConfigFilesWhenFilesParamIsArray()
     {
-        $input = array('{libraryBase}/config', '{libraryBase}/etc');
-        $expectedResult = array(
-            Finder::getLibraryBasePath() . '/config',
-            Finder::getLibraryBasePath() . '/etc'
-        );
-        $config = new Configuration($input, null);
-        $this->assertAttributeEquals($expectedResult, 'searchPaths', $config);
+        $input = '{libraryBase}/config/yapeal-example.json';
+        $expectedResult = $this->vfs->url() . '/Yapeal/config/yapeal.ini';
+        $config = new Configuration(null, null, $this->libraryPath);
+        $this->assertAttributeContains($expectedResult, 'configFiles', $config);
+        $config->addConfigFiles((array)$input);
+        $expectedResult =
+            $this->vfs->url() . '/Yapeal/config/yapeal-example.json';
+        $this->assertAttributeContains($expectedResult, 'configFiles', $config);
     }
-    public function testConstructorPathsParamIsInvalidType()
+    public function testAddConfigFilesWhenFilesParamIsString()
     {
-        //$this->setExpectedException('InvalidArgumentException');
-        $expectedResult = 1.0;
-        $config = new Configuration($expectedResult, null);
-        $this->assertAttributeNotContains(
-            $expectedResult,
-            'searchPaths',
-            $config
-        );
+        $input = '{libraryBase}/config/yapeal-example.json';
+        $expectedResult =
+            $this->vfs->url() . '/Yapeal/config/yapeal-example.json';
+        $config = new Configuration(null, null, $this->libraryPath);
+        $config->addConfigFiles($input);
+        $this->assertAttributeContains($expectedResult, 'configFiles', $config);
     }
-    public function testConstructorPathsParamIsString()
+    public function testConstructorWhenFilesParamIsArray()
     {
-        $expectedResult = array('yapeal.ini');
-        $config = new Configuration('yapeal.ini', null);
-        $this->assertAttributeEquals($expectedResult, 'searchPaths', $config);
+        $input = '{libraryBase}/config/yapeal-example.json';
+        $expectedResult =
+            array($this->vfs->url() . '/Yapeal/config/yapeal-example.json');
+        $config = new Configuration((array)$input, null, $this->libraryPath);
+        $this->assertAttributeEquals($expectedResult, 'configFiles', $config);
     }
-    public function testSetConfigFilesWithRelativePathStringAndFileDoesNotExist(
-    )
+    public function testConstructorWhenFilesParamIsArrayWithInvalidTypeElement()
     {
-        $expectedResult = 'config/yapeal.ini';
-        $config = new Configuration(null, null);
-        $config->setConfigFiles($expectedResult);
-        $expectedResult = Finder::getLibraryBasePath() . '/' . $expectedResult;
+        $logger = $this
+            ->getMockBuilder('Psr\Log\NullLogger')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $logger
+            ->expects($this->atLeastOnce())
+            ->method('log');
+        $input = array(1.0);
+        $expectedResult = array(1.0);
+        $config = new Configuration($input, $logger, $this->libraryPath);
         $this->assertAttributeNotContains(
             $expectedResult,
             'configFiles',
             $config
         );
     }
-    public function testSetConfigFilesWithRelativePathStringAndFileExists()
+    public function testConstructorWhenFilesParamIsInvalidType()
+    {
+        $logger = $this
+            ->getMockBuilder('Psr\Log\NullLogger')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $logger
+            ->expects($this->atLeastOnce())
+            ->method('log');
+        $input = 1.0;
+        $expectedResult = 1.0;
+        $config = new Configuration($input, $logger, $this->libraryPath);
+        $this->assertAttributeNotContains(
+            $expectedResult,
+            'configFiles',
+            $config
+        );
+    }
+    public function testConstructorWhenFilesParamIsString()
+    {
+        $input = '{libraryBase}/config/yapeal.ini';
+        $expectedResult =
+            array($this->vfs->url() . '/Yapeal/config/yapeal.ini');
+        $config = new Configuration($input, null, $this->libraryPath);
+        $this->assertAttributeEquals($expectedResult, 'configFiles', $config);
+    }
+    public function testSetConfigFilesDoesNotAllowAbsoluteDirectoryPathString()
+    {
+        $logger = $this
+            ->getMockBuilder('Psr\Log\NullLogger')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $logger
+            ->expects($this->atLeastOnce())
+            ->method('log');
+        $input = '/config/yapeal-example.json';
+        $expectedResult = $input;
+        $config = new Configuration(null, $logger, $this->libraryPath);
+        $config->setConfigFiles($input);
+        $this->assertAttributeNotContains(
+            $expectedResult,
+            'configFiles',
+            $config
+        );
+    }
+    public function testSetConfigFilesDoesNotAllowMultipleUriTemplatePathString(
+    )
+    {
+        $logger = $this
+            ->getMockBuilder('Psr\Log\NullLogger')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $logger
+            ->expects($this->atLeastOnce())
+            ->method('log');
+        $input = '{vendorParent}/{libraryBase}/config/yapeal-example.json';
+        $expectedResult = $input;
+        $config = new Configuration(null, $logger, $this->libraryPath);
+        $config->setConfigFiles($input);
+        $this->assertAttributeNotContains(
+            $expectedResult,
+            'configFiles',
+            $config
+        );
+    }
+    public function testSetConfigFilesDoesNotAllowUnknownUriTemplatePathString()
+    {
+        $logger = $this
+            ->getMockBuilder('Psr\Log\NullLogger')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $logger
+            ->expects($this->atLeastOnce())
+            ->method('log');
+        $input = '{Bogus}/config/yapeal-example.json';
+        $expectedResult = $input;
+        $config = new Configuration(null, $logger, $this->libraryPath);
+        $config->setConfigFiles($input);
+        $this->assertAttributeNotContains(
+            $expectedResult,
+            'configFiles',
+            $config
+        );
+    }
+    public function testSetConfigFilesDoesNotAllowUpDirectoryPathString()
+    {
+        $logger = $this
+            ->getMockBuilder('Psr\Log\NullLogger')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $logger
+            ->expects($this->atLeastOnce())
+            ->method('log');
+        $input = '{libraryBase}/../config/yapeal-example.json';
+        $expectedResult = $input;
+        $config = new Configuration(null, $logger, $this->libraryPath);
+        $config->setConfigFiles($input);
+        $this->assertAttributeNotContains(
+            $expectedResult,
+            'configFiles',
+            $config
+        );
+    }
+    public function testSetConfigFilesWithPathStringAndFileDoesNotExist()
     {
         $input = '{libraryBase}/config/yapeal-example.ini';
         $expectedResult =
-            Finder::getLibraryBasePath() . '/config/yapeal-example.ini';
-        $config = new Configuration(null, null);
+            $this->vfs->url() . '/Yapeal/config/yapeal-example.ini';
+        $config = new Configuration(null, null, $this->libraryPath);
         $config->setConfigFiles($input);
-        $this->assertAttributeContains($expectedResult, 'configFiles', $config);
-    }
-    public function testSetConfigFilesWithUpDirectoryPathString()
-    {
-        $expectedResult = 'config/../yapeal.ini';
-        $config = new Configuration(null, null);
-        $config->setConfigFiles($expectedResult);
-        $expectedResult = Finder::getLibraryBasePath() . '/' . $expectedResult;
         $this->assertAttributeNotContains(
             $expectedResult,
             'configFiles',
             $config
         );
     }
-    public function testSetPathsWithAbsolutePathsParam()
+    public function testSetConfigFilesWithPathStringAndFileExists()
     {
-        $expectedResult = '/Yapeal';
-        $config = new Configuration(null, null);
-        $config->setSearchPaths($expectedResult);
-        $this->assertAttributeNotContains(
-            $expectedResult,
-            'searchPaths',
-            $config
-        );
+        $input = '{libraryBase}/config/yapeal-example.json';
+        $expectedResult =
+            $this->vfs->url() . '/Yapeal/config/yapeal-example.json';
+        $config = new Configuration(null, null, $this->libraryPath);
+        $config->setConfigFiles($input);
+        $this->assertAttributeContains($expectedResult, 'configFiles', $config);
     }
-    public function testSetPathsWithMultipleURITemplatePathsParam()
+    public function testSetLibraryBase()
     {
-        $expectedResult = '{vendorParent}/{libraryBase}/Yapeal';
-        $config = new Configuration(null, null);
-        $config->setSearchPaths($expectedResult);
-        $this->assertAttributeNotContains(
-            $expectedResult,
-            'searchPaths',
-            $config
-        );
+        $input = '/my/web/app/Yapeal/Configuration';
+        $expectedResult = '/my/web/app/Yapeal';
+        $config = new Configuration();
+        $config->setLibraryBase($input);
+        $this->assertAttributeEquals($expectedResult, 'libraryBase', $config);
+        $expectedResult = '/my/web/app';
+        $this->assertAttributeEquals($expectedResult, 'vendorParent', $config);
+        $expectedResult = $input;
+        $config->setLibraryBase($input, 'Configuration');
+        $this->assertAttributeEquals($expectedResult, 'libraryBase', $config);
+        $input = '/my/web/app/vendor/Yapeal/Yapeal/Configuration';
+        $expectedResult = '/my/web/app/vendor/Yapeal';
+        $config->setLibraryBase($input);
+        $this->assertAttributeEquals($expectedResult, 'libraryBase', $config);
+        $expectedResult = '/my/web/app';
+        $this->assertAttributeEquals($expectedResult, 'vendorParent', $config);
+    }
+    public function testSetVendorParent()
+    {
+        $input = '/my/web/app/Yapeal/Configuration';
+        $config = new Configuration();
+        $config->setVendorParent($input, 'Yapeal');
+        $expectedResult = '/my/web/app';
+        $this->assertAttributeEquals($expectedResult, 'vendorParent', $config);
+        $input = '/my/web/app/vendor/Yapeal/Yapeal/Configuration';
+        $config->setVendorParent($input);
+        $expectedResult = '/my/web/app';
+        $this->assertAttributeEquals($expectedResult, 'vendorParent', $config);
     }
 }
