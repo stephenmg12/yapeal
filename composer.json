@@ -54,7 +54,7 @@
     },
     "require-dev":       {
         "behat/behat":               "2.5.*@dev",
-        "squizlabs/php_codesniffer": "1.4.*",
+        "squizlabs/php_codesniffer": "1.4.*"
     },
     "autoload":          {
         "classmap": ["Yapeal/"]
