@@ -13,7 +13,7 @@ Licensing requirements can be found in [LICENSE.md][4] and
 Thanks for using Yapeal, Dragonaire
 
 [1]: http://getcomposer.org/ "Composer"
-[2]: http://sourceforge.net/projects/yapeal/files/INSTALL.md/download "INSTALL.md"
-[3]: http://sourceforge.net/projects/yapeal/files/CHANGELOG.md/download "CHANGELOG.md"
-[4]: http://sourceforge.net/projects/yapeal/files/LICENSE.md/download "LICENSE.md"
-[5]: http://sourceforge.net/projects/yapeal/files/GNU-GPL.md/download "GNU-GPL.md"
+[2]: https://sourceforge.net/p/yapeal/code/ci/master/tree/INSTALL.md "INSTALL.md"
+[3]: https://sourceforge.net/p/yapeal/code/ci/master/tree/CHANGELOG.md "CHANGELOG.md"
+[4]: https://sourceforge.net/p/yapeal/code/ci/master/tree/LICENSE.md "LICENSE.md"
+[5]: https://sourceforge.net/p/yapeal/code/ci/master/tree/GNU-GPL.md "GNU-GPL.md"
