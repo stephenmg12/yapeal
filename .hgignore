@@ -12,11 +12,12 @@ cache/server/*.xml
 composer.phar
 config/yapeal.ini
 config/yapeal.json
-docs/
+Yapeal/docs/
 export/
 junk.php
-logs/
+Yapeal/logs/
 phpdoc.xml
+phpunit.xml
 test.php
 upload/
 vendor/
