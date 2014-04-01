@@ -35,9 +35,7 @@
 namespace Yapeal;
 
 use Doctrine\DBAL;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
+use Pimple;
 use Yapeal\Configuration as CFG;
 use Yapeal\Database as DB;
 use Yapeal\Network as NET;
@@ -55,31 +53,22 @@ use Yapeal\Network as NET;
  *
  * @package Yapeal
  */
-class Yapeal implements LoggerAwareInterface
+class Yapeal
 {
     /**
-     * @param CFG\ConfigurationInterface $config
-     * @param DB\DatabaseInterface       $db
-     * @param NET\NetworkInterface       $fetcher
-     * @param \Psr\Log\LoggerInterface   $logger
+     * @param Pimple $container A small Dependency Injection Container.
      *
      * @throws \RuntimeException
      */
     public function __construct(
-        CFG\ConfigurationInterface $config = null,
-        DB\DatabaseInterface $db = null,
-        NET\NetworkInterface $fetcher = null,
-        LoggerInterface $logger = null
+        Pimple $container = null
     ) {
         $tz = date_default_timezone_get();
         if ($tz !== 'UTC') {
             $mess = "Yapeal requires that PHP's timezone be set to UTC";
             throw new \RuntimeException($mess);
         }
-        $this->setLogger($logger);
-        $this->setConfiguration($config);
-        $this->setDatabase($db);
-        $this->setNetwork($fetcher);
+        $this->setContainer($container);
     }
     /**
      * Returns the version info string for Yapeal.
@@ -103,6 +92,13 @@ class Yapeal implements LoggerAwareInterface
      */
     public function configure()
     {
+        $container = $this->getContainer();
+        if (empty($container['yapeal.configuration'])) {
+            $container['yapeal.configuration.configFiles'] = array();
+            $container['yapeal.configuration'] = function ($c) {
+                return new \Yapeal\Configuration\Configuration();
+            };
+        }
         if (isset($this->configuration)) {
             $this->configuration->unifyConfiguration();
         }
@@ -111,10 +107,15 @@ class Yapeal implements LoggerAwareInterface
         }
         return $this;
     }
-    public function getDatabaseConnection()
+    /**
+     * @return Pimple
+     */
+    public function getContainer()
     {
-        $config = new DBAL\Configuration();
-        $connectionParams = array();
+        if (is_null($this->container)) {
+            $this->setContainer();
+        }
+        return $this->container;
     }
     /**
      * @return $this
@@ -122,89 +123,32 @@ class Yapeal implements LoggerAwareInterface
      */
     public function run()
     {
-        if (empty($this->database)) {
-            $mess =
-                'Database connection is needed before src::run() can be called';
-            throw new \LogicException($mess);
-        }
-        if (empty($this->network)) {
-            $mess =
-                'Network connection is needed before src::run() can be called';
-            throw new \LogicException($mess);
-        }
         $this->executeSoftLimit = strtotime('10 minutes');
         $this->savedStartTime = gmdate('Y-m-d H:i:s', $this->executeSoftLimit);
         print 'Works!' . PHP_EOL;
         return $this;
     }
     /**
-     * @param CFG\ConfigurationInterface|null $config
+     * @param Pimple|null $value
      *
      * @return self
      */
-    public function setConfiguration(CFG\ConfigurationInterface $config = null)
+    public function setContainer($value = null)
     {
-        if (is_null($config)) {
-            $config = new CFG\Configuration($this->logger);
-        }
-        $this->configuration = $config;
-        return $this;
-    }
-    /**
-     * @param DB\DatabaseInterface|null $database
-     *
-     * @return self
-     */
-    public function setDatabase(DB\DatabaseInterface $database = null)
-    {
-        $this->database = $database;
-        return $this;
-    }
-    /**
-     * @param LoggerInterface|null $logger
-     *
-     * @return null|void
-     */
-    public function setLogger(LoggerInterface $logger = null)
-    {
-        if (is_null($logger)) {
-            $logger = new NullLogger();
-        }
-        $this->logger = $logger;
-    }
-    /**
-     * @param NET\NetworkInterface|null $network
-     *
-     * @return self
-     */
-    public function setNetwork(NET\NetworkInterface $network = null)
-    {
-        $this->network = $network;
+        $this->container = $value ? : new Pimple();
         return $this;
     }
     private static $version;
     /**
-     * @var CFG\ConfigurationInterface Holds main configuration.
+     * @var Pimple $container A small Dependency Injection Container
      */
-    private $configuration;
+    private $container;
     /**
-     * @var DB\DatabaseInterface Holds main database connection.
-     */
-    private $database;
-    /**
-     * @var int Holds the soft limit used to keep src from overloading servers.
+     * @var int Holds the soft limit used to keep Yapeal from overloading servers.
      */
     private $executeSoftLimit;
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-    /**
-     * @var NET\NetworkInterface Holds main network connection.
-     */
-    private $network;
-    /**
-     * Holds GMT date-time src started
+     * Holds GMT date-time Yapeal started
      *
      * This is use to have the same time on all APIs that error out and need to be tried again.
      *

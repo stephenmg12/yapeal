@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
- * Command line interface caller for using src class.
+ * Command line interface caller for using Yapeal class.
  *
  * This script expects to be ran from a command line or from a crontab job.
  *
@@ -64,7 +64,7 @@ if (count($included) > 1 || $included[0] != __FILE__) {
  * vendor/bin/
  * OR ./
  * OR bin/
- * OR src/Yapeal/
+ * OR lib/Yapeal/
  * OR vendor/yapeal/yapeal/bin/
  */
 (@include_once dirname(__DIR__) . '/autoload.php')

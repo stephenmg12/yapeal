@@ -47,7 +47,7 @@ class Finder
      */
     public static function getLibraryBasePath(
         $path = __DIR__,
-        $library = '/src'
+        $library = '/lib'
     ) {
         while (false !== strpos($path, $library)) {
             $path = dirname($path);

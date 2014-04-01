@@ -19,15 +19,15 @@ class Character
     private $active;
     /**
      * @var integer
+     * @ORM\Column(type="bigint", nullable=true)
+     */
+    private $activeAPIMask;
+    /**
+     * @var integer
      * @ORM\Column(type="bigint")
      * @ORM\Id
      */
     private $characterID;
-    /**
-     * @var integer
-     * @ORM\Column(type="bigint", nullable=true)
-     */
-    private $activeAPIMask;
     /**
      * @var string
      * @ORM\Column(type="string", length=100, nullable=true)

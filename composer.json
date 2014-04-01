@@ -55,10 +55,10 @@
     },
     "autoload": {
         "psr-0": {
-            "Yapeal\\": "src/"
+            "Yapeal\\": "lib/"
         }
     },
-    "bin": ["src/yapeal-cli.php"],
+    "bin": ["lib/yapeal-cli.php"],
     "minimum-stability": "dev",
     "prefer-stable": true
 }

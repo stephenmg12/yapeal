@@ -148,9 +148,9 @@ class Configuration implements ConfigurationInterface, LoggerAwareInterface
         if (is_null($files)) {
             $files = array(
                 $this->libraryBase
-                . '/src/Yapeal/Configuration/yapeal-defaults.yaml',
-                $this->libraryBase . '/src/Yapeal/config/yapeal.ini',
-                $this->libraryBase . '/src/Yapeal/config/yapeal.json',
+                . '/lib/Yapeal/Configuration/yapeal-defaults.yaml',
+                $this->libraryBase . '/lib/Yapeal/config/yapeal.ini',
+                $this->libraryBase . '/lib/Yapeal/config/yapeal.json',
                 $this->vendorParent . '/config/yapeal.ini',
                 $this->vendorParent . '/config/yapeal.json'
             );
@@ -162,11 +162,11 @@ class Configuration implements ConfigurationInterface, LoggerAwareInterface
      *
      * The method assumes that any path that does not contain "/$base" is the
      * base being looked for. In other words if given $path that does not
-     * contain '/src' by default then it will use the value of $path.
+     * contain '/lib' by default then it will use the value of $path.
      *
      * Some examples:
      * <pre>
-     * $path = '/my/project/base/src';
+     * $path = '/my/project/base/lib';
      * Configuration::setLibraryBase($path);
      * // $this->libraryBase = '/my/project/base'
      *
@@ -179,11 +179,11 @@ class Configuration implements ConfigurationInterface, LoggerAwareInterface
      * Configuration::setLibraryBase($path, $base);
      * // $this->libraryBase = '/my/project/base'
      *
-     * $path = '/my/system/src/some/other/library';
+     * $path = '/my/system/lib/some/other/library';
      * Configuration::setLibraryBase($path);
      * // $this->libraryBase = '/my/system'
      *
-     * $path = 'C:\\my\project\src';
+     * $path = 'C:\\my\project\lib';
      * Configuration::setLibraryBase($path);
      * // $this->libraryBase = 'C://my/project'
      * // Note all of the '\' changed to '/'.
@@ -191,12 +191,12 @@ class Configuration implements ConfigurationInterface, LoggerAwareInterface
      *
      * The following examples would cause problems:
      * <pre>
-     * $path = '/my/project/src';
-     * $base = '/src';
+     * $path = '/my/project/lib';
+     * $base = '/lib';
      * Configuration::setLibraryBase($path, $base);
      * // The '/' is automatically prefixed to $base so becomes
-     * // $base = '//src' and
-     * // $this->libraryBase = '/my/project/src'
+     * // $base = '//lib' and
+     * // $this->libraryBase = '/my/project/lib'
      * </pre>
      *
      * @param string $path
@@ -205,7 +205,7 @@ class Configuration implements ConfigurationInterface, LoggerAwareInterface
      * @return self
      * @uses Configuration::setVendorParent()
      */
-    public function setLibraryBase($path = __DIR__, $base = 'src')
+    public function setLibraryBase($path = __DIR__, $base = 'lib')
     {
         if (!is_string($base)) {
             $mess = '$base MUST be a string but received '
@@ -403,7 +403,7 @@ class Configuration implements ConfigurationInterface, LoggerAwareInterface
      * // Up directory paths NOT allowed.
      * $path = '../../no-way';
      * // Absolute paths NOT allowed either.
-     * $path = '/src/not-happening';
+     * $path = '/lib/not-happening';
      * // Unknown URI templates NOT allowed.
      * $path = '{myTemplate}/no-no'
      * </pre>

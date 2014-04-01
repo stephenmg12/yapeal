@@ -13,7 +13,6 @@ use Doctrine\ORM\Tools\Setup;
 
 class DatabaseConnection implements DatabaseInterface
 {
-    private $em;
     public function __construct()
     {
         $conn = array(
@@ -35,4 +34,5 @@ class DatabaseConnection implements DatabaseInterface
         );
         $this->em = EntityManager::create($conn, $config);
     }
+    private $em;
 }

@@ -19,7 +19,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
             . '/Configuration/yapeal-defaults.yaml'
         );
         $structure = array(
-            'src' => array(
+            'lib' => array(
                 'Yapeal' => array(
                     'config' => array(
                         'yapeal.ini' => 'bogus',
@@ -44,7 +44,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
                                 'Configuration' => array()
                             )
                         ),
-                        'src' => array(
+                        'lib' => array(
                             'my-app' => array(
                                 'Config' => array()
                             )
@@ -54,7 +54,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
             )
         );
         $this->vfs = VFS\vfsStream::setup('phpUnit', null, $structure);
-        $this->configPath = $this->vfs->url() . '/src/Yapeal/Configuration';
+        $this->configPath = $this->vfs->url() . '/lib/Yapeal/Configuration';
     }
     public function testAddConfigFilesWhenFilesParamIsArray()
     {
@@ -194,7 +194,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     public function testSetConfigFilesWithPathStringAndFileDoesNotExist()
     {
         $input = '{libraryBase}/config/yapeal-example.ini';
-        $expectedResult = $this->vfs->url() . '/src/config/yapeal-example.ini';
+        $expectedResult = $this->vfs->url() . '/lib/config/yapeal-example.ini';
         $config = new Configuration(null, null, $this->configPath);
         $config->setConfigFiles($input);
         $this->assertAttributeNotContains(
@@ -214,17 +214,17 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     }
     public function testSetLibraryBase()
     {
-        $input = $this->vfs->url() . '/my/web/app/src/my-app/Config';
+        $input = $this->vfs->url() . '/my/web/app/lib/my-app/Config';
         $expectedResult = $this->vfs->url() . '/my/web/app';
         $config = new Configuration();
         $config->setLibraryBase($input);
         $this->assertAttributeEquals($expectedResult, 'libraryBase', $config);
         $this->assertAttributeEquals($expectedResult, 'vendorParent', $config);
-        $expectedResult = $this->vfs->url() . '/my/web/app/src/my-app';
+        $expectedResult = $this->vfs->url() . '/my/web/app/lib/my-app';
         $config->setLibraryBase($input, 'Config');
         $this->assertAttributeEquals($expectedResult, 'libraryBase', $config);
         $input =
-            $this->vfs->url() . '/my/web/app/vendor/src/src/src/Configuration';
+            $this->vfs->url() . '/my/web/app/vendor/lib/lib/lib/Configuration';
         $expectedResult = $this->vfs->url() . '/my/web/app/vendor';
         $config->setLibraryBase($input);
         $this->assertAttributeEquals($expectedResult, 'libraryBase', $config);
@@ -236,11 +236,11 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $input =
             $this->vfs->url() . '/my/web/app/vendor/Yapeal/Configuration';
         $config = new Configuration();
-        $config->setVendorParent($input, 'src');
+        $config->setVendorParent($input, 'lib');
         $expectedResult = $this->vfs->url() . '/my/web/app';
         $this->assertAttributeEquals($expectedResult, 'vendorParent', $config);
         $input =
-            $this->vfs->url() . '/my/web/app/src/my-app/Config';
+            $this->vfs->url() . '/my/web/app/lib/my-app/Config';
         $config->setVendorParent($input);
         $expectedResult = $this->vfs->url() . '/my/web/app';
         $this->assertAttributeEquals($expectedResult, 'vendorParent', $config);

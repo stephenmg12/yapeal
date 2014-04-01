@@ -11,12 +11,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AccessMask
 {
+    const COMPLETE = 16;
     /**
-     * @var string
-     * @ORM\Column(name="section", type="string", length=8, nullable=false)
-     * @ORM\Id
+     * Constants used with status.
      */
-    private $section;
+    const NOT_WORKING = 1;
+    const TESTING = 8;
+    const WIP = 4;
+    const XSD_ONLY = 2;
     /**
      * @var string
      * @ORM\Column(name="api", type="string", length=32, nullable=false)
@@ -34,16 +36,14 @@ class AccessMask
      */
     private $mask;
     /**
+     * @var string
+     * @ORM\Column(name="section", type="string", length=8, nullable=false)
+     * @ORM\Id
+     */
+    private $section;
+    /**
      * @var integer
      * @ORM\Column(name="status", type="smallint", nullable=false)
      */
     private $status;
-    /**
-     * Constants used with status.
-     */
-    const NOT_WORKING = 1;
-    const XSD_ONLY = 2;
-    const WIP = 4;
-    const TESTING = 8;
-    const COMPLETE = 16;
 }

@@ -48,7 +48,7 @@ class ApiConnection extends Client implements NetworkInterface
     public function getDefaultUserAgent()
     {
         return
-            'src/'
+            'lib/'
             . Yapeal::getVersion()
             . ' curl/'
             . CurlVersion::getInstance()
