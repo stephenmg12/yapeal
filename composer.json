@@ -1,66 +1,64 @@
 {
-    "name":              "yapeal/yapeal",
-    "description":       "Yet Another Php Eve Api Library",
-    "keywords":          ["curl", "database", "Eve-Online", "rest", "PDO"],
-    "license":           "LGPL-3.0+",
-    "authors":           [
+    "name": "yapeal/yapeal",
+    "description": "Yet Another Php Eve Api Library",
+    "keywords": ["curl", "database", "Eve-Online", "rest", "PDO"],
+    "license": "LGPL-3.0+",
+    "authors": [
         {
-            "name":  "Michael Cummings",
+            "name": "Michael Cummings",
             "email": "dragonaire@users.sourceforge.net",
-            "role":  "Developer"
+            "role": "Developer"
         },
         {
-            "name":  "Somerset Mahm",
+            "name": "Somerset Mahm",
             "email": "somersetmahm@users.sourceforge.net",
-            "role":  "Developer"
+            "role": "Developer"
         }
     ],
-    "homepage":          "https://sourceforge.net/p/yapeal/wiki/Home/",
-    "support":           {
+    "homepage": "https://sourceforge.net/p/yapeal/wiki/Home/",
+    "support": {
         "issues": "https://sourceforge.net/p/yapeal/tickets/",
         "source": "https://sourceforge.net/projects/yapeal/files/",
-        "wiki":   "https://sourceforge.net/p/yapeal/wiki/Home/"
+        "wiki": "https://sourceforge.net/p/yapeal/wiki/Home/"
     },
-    "require":           {
-        "doctrine/dbal":               "2.4.*@dev",
-        "doctrine/migrations":         "dev-master",
-        "doctrine/orm":                "2.4.*@dev",
-        "ext-apc":                     "*",
-        "ext-curl":                    "*",
-        "ext-date":                    "*",
-        "ext-hash":                    "*",
-        "ext-mysqli":                  "*",
-        "ext-openssl":                 "*",
-        "ext-PDO":                     "*",
-        "ext-pdo_mysql":               "*",
-        "ext-Reflection":              "*",
-        "ext-SPL":                     "*",
-        "ext-xmlreader":               "*",
-        "ext-xsl":                     "*",
-        "guzzle/guzzle":               "3.7.*@dev",
-        "lib-curl":                    ">=7.19.7",
-        "lib-openssl":                 ">=0.9.8",
-        "mikey179/vfsStream":          "v1.2.0",
-        "monolog/monolog":             "1.6.*@dev",
-        "php":                         ">=5.3.6",
-        "phpdocumentor/graphviz":      "1.0.0",
-        "phpdocumentor/phpdocumentor": "v2.1.0",
-        "phpunit/phpunit":             "3.7.*@dev",
-        "phpunit/dbunit":              ">=1.2",
-        "phpunit/php-invoker":         "*",
-        "twig/twig":                   "v1.13.2"
+    "require": {
+        "doctrine/dbal": "2.4.*@dev",
+        "doctrine/migrations": "dev-master",
+        "doctrine/orm": "2.4.*@dev",
+        "ext-curl": "*",
+        "ext-date": "*",
+        "ext-hash": "*",
+        "ext-mysqli": "*",
+        "ext-openssl": "*",
+        "ext-PDO": "*",
+        "ext-pdo_mysql": "*",
+        "ext-Reflection": "*",
+        "ext-SPL": "*",
+        "ext-xmlreader": "*",
+        "geraintluff/jsv4": "dev-master",
+        "guzzle/guzzle": "3.7.*@dev",
+        "lib-curl": ">=7.19.7",
+        "lib-openssl": ">=0.9.8",
+        "mikey179/vfsStream": "v1.2.0",
+        "monolog/monolog": "1.6.*@dev",
+        "php": ">=5.3.6",
+        "phpunit/phpunit": "3.7.*@dev",
+        "phpunit/dbunit": ">=1.2",
+        "pimple/pimple": "2.0.*@dev",
+        "symfony/config": "2.5.*@dev",
+        "twig/twig": "v1.13.2"
     },
-    "require-dev":       {
-        "phpmd/phpmd":      "1.5.0",
+    "require-dev": {
+        "phpmd/phpmd": "1.5.0",
         "sebastian/phpcpd": "1.4.x-dev",
         "squizlabs/php_codesniffer": "1.4.*"
     },
-    "autoload":          {
+    "autoload": {
         "psr-0": {
             "Yapeal\\": "src/"
         }
     },
-    "bin":               ["src/yapeal-cli.php"],
+    "bin": ["src/yapeal-cli.php"],
     "minimum-stability": "dev",
-    "prefer-stable":     true
+    "prefer-stable": true
 }
