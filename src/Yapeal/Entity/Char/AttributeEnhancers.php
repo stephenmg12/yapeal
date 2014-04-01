@@ -9,16 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_AttributeEnhancers")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class AttributeEnhancers extends AbstractCharacterOwner
 {
-    /**
-     * @var string
-     * @ORM\Column(type="string", length=24)
-     * @ORM\Id
-     */
-    private $bonusName;
     /**
      * @var string
      * @ORM\Column(type="string")
@@ -29,4 +23,10 @@ class AttributeEnhancers extends AbstractCharacterOwner
      * @ORM\Column(type="smallint")
      */
     private $augmentatorValue;
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=24)
+     * @ORM\Id
+     */
+    private $bonusName;
 }

@@ -4,17 +4,17 @@
  *
  * PHP version 5.3
  *
- * LICENSE: This file is part of Yet Another Php Eve Api library also know as src which will be used to refer to it
+ * LICENSE: This file is part of Yet Another Php Eve Api library also know as Yapeal which will be used to refer to it
  * in the rest of this license.
  *
- * src is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public
+ * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
  * version.
  *
- * src is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
  * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License along with src. If not, see
+ * You should have received a copy of the GNU Lesser General Public License along with this program. If not, see
  * <http://www.gnu.org/licenses/>.
  *
  * @author     Michael Cummings <mgcummings@yahoo.com>
@@ -33,16 +33,84 @@ namespace Yapeal\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Abstract mapping super class use in src's entity classes.
+ * Abstract mapping super class use in Yapeal's entity classes.
  *
  * Many APIs have this common core group of fields. To save repeating the fields
  * in all the entity classes they can extend this class instead.
  *
  * @ORM\MappedSuperClass
- * @package src\Entity
+ * @package Yapeal\Entity
  */
 abstract class AbstractCharacter
 {
+    /**
+     * @return int
+     */
+    public function getCharacterID()
+    {
+        return $this->characterID;
+    }
+    /**
+     * @return string
+     */
+    public function getCharacterName()
+    {
+        return $this->characterName;
+    }
+    /**
+     * @return int
+     */
+    public function getCorporationID()
+    {
+        return $this->corporationID;
+    }
+    /**
+     * @return string
+     */
+    public function getCorporationName()
+    {
+        return $this->corporationName;
+    }
+    /**
+     * @param int $characterID
+     *
+     * @return self
+     */
+    public function setCharacterID($characterID)
+    {
+        $this->characterID = $characterID;
+        return $this;
+    }
+    /**
+     * @param string $characterName
+     *
+     * @return self
+     */
+    public function setCharacterName($characterName)
+    {
+        $this->characterName = $characterName;
+        return $this;
+    }
+    /**
+     * @param int $corporationID
+     *
+     * @return self
+     */
+    public function setCorporationID($corporationID)
+    {
+        $this->corporationID = $corporationID;
+        return $this;
+    }
+    /**
+     * @param string $corporationName
+     *
+     * @return self
+     */
+    public function setCorporationName($corporationName)
+    {
+        $this->corporationName = $corporationName;
+        return $this;
+    }
     /**
      * @var integer Character ID as received from Eve API.
      * @ORM\Column(type="bigint")
@@ -64,72 +132,4 @@ abstract class AbstractCharacter
      * @ORM\Column(type="string", length=50)
      */
     protected $corporationName;
-    /**
-     * @return int
-     */
-    public function getCharacterID()
-    {
-        return $this->characterID;
-    }
-    /**
-     * @param int $characterID
-     *
-     * @return self
-     */
-    public function setCharacterID($characterID)
-    {
-        $this->characterID = $characterID;
-        return $this;
-    }
-    /**
-     * @return string
-     */
-    public function getCharacterName()
-    {
-        return $this->characterName;
-    }
-    /**
-     * @param string $characterName
-     *
-     * @return self
-     */
-    public function setCharacterName($characterName)
-    {
-        $this->characterName = $characterName;
-        return $this;
-    }
-    /**
-     * @return int
-     */
-    public function getCorporationID()
-    {
-        return $this->corporationID;
-    }
-    /**
-     * @param int $corporationID
-     *
-     * @return self
-     */
-    public function setCorporationID($corporationID)
-    {
-        $this->corporationID = $corporationID;
-        return $this;
-    }
-    /**
-     * @return string
-     */
-    public function getCorporationName()
-    {
-        return $this->corporationName;
-    }
-    /**
-     * @param string $corporationName
-     *
-     * @return self
-     */
-    public function setCorporationName($corporationName)
-    {
-        $this->corporationName = $corporationName;
-        return $this;
-    }
 }

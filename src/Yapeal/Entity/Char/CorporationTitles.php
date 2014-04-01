@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_CorporationTitles")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class CorporationTitles extends AbstractCharacterOwner
 {

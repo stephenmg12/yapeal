@@ -9,10 +9,15 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_ContactNotifications")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class ContactNotifications extends AbstractCharacterOwner
 {
+    /**
+     * @var string
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $messageData;
     /**
      * @var integer
      * @ORM\Column(type="bigint")
@@ -35,9 +40,4 @@ class ContactNotifications extends AbstractCharacterOwner
      * @ORM\Column(type="datetime")
      */
     private $sentDate;
-    /**
-     * @var string
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $messageData;
 }

@@ -9,10 +9,26 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_FacWarStats")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class FacWarStats extends AbstractCharacterOwner
 {
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    }
+    /**
+     * @var integer
+     * @ORM\Column(type="bigint")
+     */
+    private $currentRank;
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     */
+    private $enlisted;
     /**
      * @var integer
      * @ORM\Column(type="bigint")
@@ -24,25 +40,10 @@ class FacWarStats extends AbstractCharacterOwner
      */
     private $factionName;
     /**
-     * @var \DateTime
-     * @ORM\Column(type="datetime")
-     */
-    private $enlisted;
-    /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     */
-    private $currentRank;
-    /**
      * @var integer
      * @ORM\Column(type="bigint")
      */
     private $highestRank;
-    /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     */
-    private $killsYesterday;
     /**
      * @var integer
      * @ORM\Column(type="bigint")
@@ -57,7 +58,7 @@ class FacWarStats extends AbstractCharacterOwner
      * @var integer
      * @ORM\Column(type="bigint")
      */
-    private $victoryPointsYesterday;
+    private $killsYesterday;
     /**
      * @var integer
      * @ORM\Column(type="bigint")
@@ -69,9 +70,8 @@ class FacWarStats extends AbstractCharacterOwner
      */
     private $victoryPointsTotal;
     /**
-     * Constructor
+     * @var integer
+     * @ORM\Column(type="bigint")
      */
-    public function __construct()
-    {
-    }
+    private $victoryPointsYesterday;
 }

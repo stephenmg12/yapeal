@@ -9,16 +9,16 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_IndustryJobs")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class IndustryJobs extends AbstractCharacterOwner
 {
     /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     * @ORM\Id
+     * Constructor
      */
-    private $jobID;
+    public function __construct()
+    {
+    }
     /**
      * @var integer
      * @ORM\Column(type="smallint")
@@ -80,6 +80,11 @@ class IndustryJobs extends AbstractCharacterOwner
      */
     private $endProductionTime;
     /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     */
+    private $installTime;
+    /**
      * @var integer
      * @ORM\Column(type="bigint")
      */
@@ -135,10 +140,11 @@ class IndustryJobs extends AbstractCharacterOwner
      */
     private $installerID;
     /**
-     * @var \DateTime
-     * @ORM\Column(type="datetime")
+     * @var integer
+     * @ORM\Column(type="bigint")
+     * @ORM\Id
      */
-    private $installTime;
+    private $jobID;
     /**
      * @var integer
      * @ORM\Column(type="bigint")
@@ -179,10 +185,4 @@ class IndustryJobs extends AbstractCharacterOwner
      * @ORM\Column(type="float")
      */
     private $timeMultiplier;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-    }
 }

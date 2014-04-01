@@ -9,10 +9,16 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_MailMessages")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class MailMessages extends AbstractCharacterOwner
 {
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    }
     /**
      * @var integer
      * @ORM\Column(type="bigint")
@@ -49,10 +55,4 @@ class MailMessages extends AbstractCharacterOwner
      * @ORM\Column(type="text", nullable=true)
      */
     private $toListID;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-    }
 }

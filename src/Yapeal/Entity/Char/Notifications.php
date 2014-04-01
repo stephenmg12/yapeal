@@ -9,10 +9,16 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_Notifications")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class Notifications extends AbstractCharacterOwner
 {
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    }
     /**
      * @var integer
      * @ORM\Column(type="bigint")
@@ -39,10 +45,4 @@ class Notifications extends AbstractCharacterOwner
      * @ORM\Column(type="smallint")
      */
     private $typeID;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-    }
 }

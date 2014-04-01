@@ -9,10 +9,16 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_Research")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class Research extends AbstractCharacterOwner
 {
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    }
     /**
      * @var integer
      * @ORM\Column(type="bigint")
@@ -25,11 +31,6 @@ class Research extends AbstractCharacterOwner
      */
     private $pointsPerDay;
     /**
-     * @var integer
-     * @ORM\Column(type="bigint", nullable=true)
-     */
-    private $skillTypeID;
-    /**
      * @var float
      * @ORM\Column(type="float")
      */
@@ -40,9 +41,8 @@ class Research extends AbstractCharacterOwner
      */
     private $researchStartDate;
     /**
-     * Constructor
+     * @var integer
+     * @ORM\Column(type="bigint", nullable=true)
      */
-    public function __construct()
-    {
-    }
+    private $skillTypeID;
 }

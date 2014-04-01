@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
  * AbstractCharacterOwner
  *
  * @ORM\MappedSuperClass
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 abstract class AbstractCharacterOwner
 {

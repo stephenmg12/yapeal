@@ -10,31 +10,10 @@ use Yapeal\Entity\Types;
  *
  * @ORM\Table(name="char_Contracts")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class Contracts extends AbstractCharacterOwner
 {
-    /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     * @ORM\Id
-     */
-    private $contractID;
-    /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     */
-    private $issuerID;
-    /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     */
-    private $issuerCorpID;
-    /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     */
-    private $assigneeID = 0;
     /**
      * @var integer
      * @ORM\Column(type="bigint")
@@ -44,42 +23,38 @@ class Contracts extends AbstractCharacterOwner
      * @var integer
      * @ORM\Column(type="bigint")
      */
-    private $startStationID;
-    /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     */
-    private $endStationID;
-    /**
-     * @var string
-     * @ORM\Column(type="string", length=15)
-     */
-    private $type;
-    /**
-     * @var string
-     * @ORM\Column(type="string", length=25)
-     */
-    private $status;
-    /**
-     * @var string
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $title;
-    /**
-     * @var boolean
-     * @ORM\Column(type="boolean")
-     */
-    private $forCorp;
+    private $assigneeID = 0;
     /**
      * @var string
      * @ORM\Column(type="string", length=10)
      */
     private $availability;
     /**
+     * @var string
+     * @ORM\Column(type="ISK")
+     */
+    private $buyout;
+    /**
+     * @var string
+     * @ORM\Column(type="ISK")
+     */
+    private $collateral = 0;
+    /**
+     * @var integer
+     * @ORM\Column(type="bigint")
+     * @ORM\Id
+     */
+    private $contractID;
+    /**
      * @var \DateTime
      * @ORM\Column(type="datetime")
      */
-    private $dateIssued;
+    private $dateAccepted;
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateCompleted;
     /**
      * @var \DateTime
      * @ORM\Column(type="datetime")
@@ -89,17 +64,32 @@ class Contracts extends AbstractCharacterOwner
      * @var \DateTime
      * @ORM\Column(type="datetime")
      */
-    private $dateAccepted;
+    private $dateIssued;
+    /**
+     * @var integer
+     * @ORM\Column(type="bigint")
+     */
+    private $endStationID;
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean")
+     */
+    private $forCorp;
+    /**
+     * @var integer
+     * @ORM\Column(type="bigint")
+     */
+    private $issuerCorpID;
+    /**
+     * @var integer
+     * @ORM\Column(type="bigint")
+     */
+    private $issuerID;
     /**
      * @var integer
      * @ORM\Column(type="smallint")
      */
     private $numDays;
-    /**
-     * @var \DateTime
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $dateCompleted;
     /**
      * @var string
      * @ORM\Column(type="ISK")
@@ -111,15 +101,25 @@ class Contracts extends AbstractCharacterOwner
      */
     private $reward = 0;
     /**
-     * @var string
-     * @ORM\Column(type="ISK")
+     * @var integer
+     * @ORM\Column(type="bigint")
      */
-    private $collateral = 0;
+    private $startStationID;
     /**
      * @var string
-     * @ORM\Column(type="ISK")
+     * @ORM\Column(type="string", length=25)
      */
-    private $buyout;
+    private $status;
+    /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $title;
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=15)
+     */
+    private $type;
     /**
      * @var float
      * @ORM\Column(type="float")

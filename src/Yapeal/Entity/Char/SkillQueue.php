@@ -9,16 +9,16 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_SkillQueue")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class SkillQueue extends AbstractCharacterOwner
 {
     /**
-     * @var integer
-     * @ORM\Column(type="smallint")
-     * @ORM\Id
+     * Constructor
      */
-    private $queuePosition;
+    public function __construct()
+    {
+    }
     /**
      * @var integer
      * @ORM\Column(type="bigint")
@@ -36,6 +36,12 @@ class SkillQueue extends AbstractCharacterOwner
     private $level;
     /**
      * @var integer
+     * @ORM\Column(type="smallint")
+     * @ORM\Id
+     */
+    private $queuePosition;
+    /**
+     * @var integer
      * @ORM\Column(type="bigint")
      */
     private $startSP;
@@ -49,10 +55,4 @@ class SkillQueue extends AbstractCharacterOwner
      * @ORM\Column(type="bigint")
      */
     private $typeID;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-    }
 }

@@ -5,7 +5,7 @@
  * PHP version 5.3
  *
  * LICENSE:
- * This file is part of Yet Another Php Eve Api Library also know as src which can be used to access the Eve Online
+ * This file is part of Yet Another Php Eve Api Library also know as Yapeal which can be used to access the Eve Online
  * API data and place it into a database.
  * Copyright (C) 2013  Michael Cummings
  *
@@ -31,12 +31,14 @@
  */
 namespace Yapeal\Configuration;
 
+use Symfony\Component\Config\Definition as SCCI;
+
 /**
  * ConfigurationInterface interface.
  *
- * @package src\Configuration
+ * @package Yapeal\Configuration
  */
-interface ConfigurationInterface
+interface ConfigurationInterface extends SCCI\ConfigurationInterface
 {
     /**
      * Add one or more names of configuration files to be looked for and used.
@@ -49,9 +51,18 @@ interface ConfigurationInterface
     /**
      * Set the name or names of configuration files to be looked for and used.
      *
-     * @param string|string[] $files Files to use if null use defaults.
+     * @param string|string[]|null $files Files to use if null use defaults.
      *
      * @return self
      */
     public function setConfigFiles($files = null);
+    /**
+     * Fetches, parses, and merges all existing configuration files into a
+     * single unified configuration.
+     *
+     * @param ConfigFactoryInterface $factory
+     *
+     * @return self
+     */
+    public function unifyConfiguration(ConfigFactoryInterface $factory = null);
 }

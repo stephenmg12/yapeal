@@ -8,7 +8,7 @@
  * PHP version 5.3
  *
  * LICENSE:
- * This file is part of Yet Another Php Eve Api Library also know as src which can be used to access the Eve Online
+ * This file is part of Yet Another Php Eve Api Library also know as Yapeal which can be used to access the Eve Online
  * API data and place it into a database.
  * Copyright (C) 2013  Michael Cummings
  *
@@ -59,11 +59,20 @@ if (count($included) > 1 || $included[0] != __FILE__) {
     fwrite(STDERR, $mess);
     exit(1);
 };
-$path = dirname(__DIR__);
-while (false !== strpos($path, '/vendor')) {
-    $path = dirname($path);
-}
-require_once $path . '/vendor/autoload.php';
+/*
+ * Find auto loader from one of
+ * vendor/bin/
+ * OR ./
+ * OR bin/
+ * OR src/Yapeal/
+ * OR vendor/yapeal/yapeal/bin/
+ */
+(@include_once dirname(__DIR__) . '/autoload.php')
+|| (@include_once __DIR__ . '/vendor/autoload.php')
+|| (@include_once dirname(__DIR__) . '/vendor/autoload.php')
+|| (@include_once dirname(dirname(__DIR__)) . '/vendor/autoload.php')
+|| (@include_once dirname(dirname(dirname(__DIR__))) . '/autoload.php')
+|| die('Could not find required auto class loader. Aborting ...');
 $yapeal = new Yapeal();
 $yapeal->configure()
-    ->run();
+       ->run();

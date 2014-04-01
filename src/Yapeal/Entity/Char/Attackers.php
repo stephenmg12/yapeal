@@ -9,23 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_Attackers")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class Attackers
 {
-    /**
-     * @var integer
-     * @ORM\JoinColumn(name="killID", referencedColumnName="killID", nullable=false, onDelete="restrict")
-     * @ORM\ManyToOne(targetEntity="KillLog", inversedBy="attackers")
-     * @ORM\Id
-     */
-    private $killID;
-    /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     * @ORM\Id
-     */
-    private $characterID = 0;
     /**
      * @var integer
      * @ORM\Column(type="bigint")
@@ -36,6 +23,12 @@ class Attackers
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     private $allianceName;
+    /**
+     * @var integer
+     * @ORM\Column(type="bigint")
+     * @ORM\Id
+     */
+    private $characterID = 0;
     /**
      * @var string
      * @ORM\Column(type="string", length=50, nullable=true)
@@ -71,6 +64,13 @@ class Attackers
      * @ORM\Column(type="boolean")
      */
     private $finalBlow;
+    /**
+     * @var integer
+     * @ORM\JoinColumn(name="killID", referencedColumnName="killID", nullable=false, onDelete="restrict")
+     * @ORM\ManyToOne(targetEntity="KillLog", inversedBy="attackers")
+     * @ORM\Id
+     */
+    private $killID;
     /**
      * @var float
      * @ORM\Column(type="float")

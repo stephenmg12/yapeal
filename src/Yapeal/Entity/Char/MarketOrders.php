@@ -10,16 +10,17 @@ use Yapeal\Entity\Types;
  *
  * @ORM\Table(name="char_MarketOrders")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class MarketOrders extends AbstractCharacterOwner
 {
     /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     * @ORM\Id
+     * Constructor
      */
-    private $orderID;
+    public function __construct()
+    {
+        bcscale(2);
+    }
     /**
      * @var integer
      * @ORM\Column(type="smallint")
@@ -57,6 +58,12 @@ class MarketOrders extends AbstractCharacterOwner
     private $minVolume;
     /**
      * @var integer
+     * @ORM\Column(type="bigint")
+     * @ORM\Id
+     */
+    private $orderID;
+    /**
+     * @var integer
      * @ORM\Column(type="smallint")
      */
     private $orderState;
@@ -90,11 +97,4 @@ class MarketOrders extends AbstractCharacterOwner
      * @ORM\Column(type="bigint")
      */
     private $volRemaining;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        bcscale(2);
-    }
 }

@@ -10,24 +10,22 @@ use Yapeal\Entity\Types;
  *
  * @ORM\Table(name="char_ContractBids")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class ContractBids
 {
     /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     * @ORM\Id
+     * Constructor
      */
-    private $contractID;
+    public function __construct()
+    {
+        bcscale(2);
+    }
     /**
-     * Used to make foreign key work as part of composite primary key.
-     *
-     * @var integer
-     * @ORM\JoinColumn(name="contractID", referencedColumnName="contractID", nullable=false, onDelete="restrict")
-     * @ORM\ManyToOne(targetEntity="Contracts")
+     * @var string
+     * @ORM\Column(type="ISK")
      */
-    private $dummyContract;
+    private $amount;
     /**
      * @var integer
      * @ORM\Column(type="bigint")
@@ -40,20 +38,22 @@ class ContractBids
      */
     private $bidderID;
     /**
+     * @var integer
+     * @ORM\Column(type="bigint")
+     * @ORM\Id
+     */
+    private $contractID;
+    /**
      * @var \DateTime
      * @ORM\Column(type="datetime")
      */
     private $dateBid;
     /**
-     * @var string
-     * @ORM\Column(type="ISK")
+     * Used to make foreign key work as part of composite primary key.
+     *
+     * @var integer
+     * @ORM\JoinColumn(name="contractID", referencedColumnName="contractID", nullable=false, onDelete="restrict")
+     * @ORM\ManyToOne(targetEntity="Contracts")
      */
-    private $amount;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        bcscale(2);
-    }
+    private $dummyContract;
 }

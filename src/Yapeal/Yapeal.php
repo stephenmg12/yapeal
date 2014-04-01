@@ -1,11 +1,11 @@
 <?php
 /**
- * Contains src class.
+ * Contains Yapeal class.
  *
  * PHP version 5.3
  *
  * LICENSE:
- * This file is part of Yet Another Php Eve Api Library also know as src which can be used to access the Eve Online
+ * This file is part of Yet Another Php Eve Api Library also know as Yapeal which can be used to access the Eve Online
  * API data and place it into a database.
  * Copyright (C) 2013  Michael Cummings
  *
@@ -30,7 +30,7 @@
  * @link      http://www.eveonline.com/
  */
 /**
- * Main namespace for all of src. All other namespaces used are under it.
+ * Main namespace for all of Yapeal. All other namespaces used are under it.
  */
 namespace Yapeal;
 
@@ -43,53 +43,25 @@ use Yapeal\Database as DB;
 use Yapeal\Network as NET;
 
 /**
- * Class src is used to get information from Eve Online API and store in to a
+ * Class Yapeal is used to get information from Eve Online API and store in to a
  * database.
  *
- * This is the main class that is needed to use src.
+ * This is the main class that is needed to use Yapeal.
  *
- * The src class expects that a suitable PSR-0 compatible auto-loader is
+ * The Yapeal class expects that a suitable PSR-0 compatible auto-loader is
  * being used that will look in it's current installed location and make
  * available the other packages from the vendor directory. Composer's default
  * one which you can find in vendor/autoload.php works.
  *
- * @package src
+ * @package Yapeal
  */
 class Yapeal implements LoggerAwareInterface
 {
-    private static $version;
-    /**
-     * @var CFG\ConfigurationInterface Holds main configuration.
-     */
-    private $configuration;
-    /**
-     * @var DB\DatabaseInterface Holds main database connection.
-     */
-    private $database;
-    /**
-     * @var int Holds the soft limit used to keep src from overloading servers.
-     */
-    private $executeSoftLimit;
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-    /**
-     * @var NET\NetworkInterface Holds main network connection.
-     */
-    private $network;
-    /**
-     * Holds GMT date-time src started
-     *
-     * This is use to have the same time on all APIs that error out and need to be tried again.
-     *
-     * @var string
-     */
-    private $savedStartTime;
     /**
      * @param CFG\ConfigurationInterface $config
      * @param DB\DatabaseInterface       $db
      * @param NET\NetworkInterface       $fetcher
+     * @param \Psr\Log\LoggerInterface   $logger
      *
      * @throws \RuntimeException
      */
@@ -101,7 +73,7 @@ class Yapeal implements LoggerAwareInterface
     ) {
         $tz = date_default_timezone_get();
         if ($tz !== 'UTC') {
-            $mess = "src requires that PHP's timezone be set to UTC";
+            $mess = "Yapeal requires that PHP's timezone be set to UTC";
             throw new \RuntimeException($mess);
         }
         $this->setLogger($logger);
@@ -110,7 +82,7 @@ class Yapeal implements LoggerAwareInterface
         $this->setNetwork($fetcher);
     }
     /**
-     * Returns the version info string for src.
+     * Returns the version info string for Yapeal.
      *
      * @return string
      * @throws \RuntimeException Throws \RuntimeException if can not access VERSION file.
@@ -126,10 +98,13 @@ class Yapeal implements LoggerAwareInterface
         }
         return static::$version;
     }
+    /**
+     * @return $this
+     */
     public function configure()
     {
         if (isset($this->configuration)) {
-            $this->configuration->fetchConfiguration();
+            $this->configuration->unifyConfiguration();
         }
         if (empty($this->database)) {
             $db = 'junk'; // TODO database stuff
@@ -141,6 +116,10 @@ class Yapeal implements LoggerAwareInterface
         $config = new DBAL\Configuration();
         $connectionParams = array();
     }
+    /**
+     * @return $this
+     * @throws \LogicException
+     */
     public function run()
     {
         if (empty($this->database)) {
@@ -203,4 +182,33 @@ class Yapeal implements LoggerAwareInterface
         $this->network = $network;
         return $this;
     }
+    private static $version;
+    /**
+     * @var CFG\ConfigurationInterface Holds main configuration.
+     */
+    private $configuration;
+    /**
+     * @var DB\DatabaseInterface Holds main database connection.
+     */
+    private $database;
+    /**
+     * @var int Holds the soft limit used to keep src from overloading servers.
+     */
+    private $executeSoftLimit;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+    /**
+     * @var NET\NetworkInterface Holds main network connection.
+     */
+    private $network;
+    /**
+     * Holds GMT date-time src started
+     *
+     * This is use to have the same time on all APIs that error out and need to be tried again.
+     *
+     * @var string
+     */
+    private $savedStartTime;
 }

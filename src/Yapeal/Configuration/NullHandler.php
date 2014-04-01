@@ -1,11 +1,13 @@
 <?php
 /**
- * Contains ConfigHandlerInterface interface.
+ * Contains NullHandler class.
+ *
+ * PHP version 5.3
  *
  * LICENSE:
  * This file is part of Yet Another Php Eve Api Library also know as Yapeal which can be used to access the Eve Online
  * API data and place it into a database.
- * Copyright (C) 2013  Michael Cummings
+ * Copyright (C) 2014 Michael Cummings
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option)
@@ -21,34 +23,43 @@
  * You should be able to find a copy of this license in the LICENSE.md file. A copy of the GNU GPL should also be
  * available in the GNU-GPL.md file.
  *
- * @author    Michael Cummings <mgcummings@yahoo.com>
- * @copyright 2013 Michael Cummings
+ * @copyright 2014 Michael Cummings
  * @license   http://www.gnu.org/copyleft/lesser.html GNU LGPL
- * @link      http://code.google.com/p/yapeal/
- * @link      http://www.eveonline.com/
+ * @author    Michael Cummings <mgcummings@yahoo.com>
  */
 namespace Yapeal\Configuration;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
+
 /**
- * ConfigHandlerInterface interface.
+ * Class NullHandler
  *
  * @package Yapeal\Configuration
  */
-interface ConfigHandlerInterface
+class NullHandler implements ConfigHandlerInterface, LoggerAwareInterface
 {
+    /**
+     * @param LoggerInterface $logger
+     */
+    public function __construct(LoggerInterface $logger = null)
+    {
+        $this->setLogger($logger);
+    }
     /**
      * Get the processed configuration as a key => value list.
      *
+     * @throws \LogicException
      * @return string[string]
      */
-    public function getProcessedConfigurationAsStringArray();
-    /**
-     * Loads a resource.
-     *
-     * @param mixed  $resource The resource
-     * @param string $type     The resource type
-     */
-    public function load($resource, $type = null);
+    public function getProcessedConfigurationAsStringArray()
+    {
+        if (is_null($this->config)) {
+            $mess = 'MUST call processConfiguration() first';
+            throw new \LogicException($mess);
+        }
+        return $this->config;
+    }
     /**
      * Process the configuration 'file'.
      *
@@ -56,14 +67,24 @@ interface ConfigHandlerInterface
      *
      * @return self
      */
-    public function processConfiguration($config);
+    public function processConfiguration($config)
+    {
+        $this->config = array();
+        return $this;
+    }
     /**
-     * Returns true if this class supports the given resource.
+     * Sets a logger instance on the object
      *
-     * @param mixed  $resource A resource
-     * @param string $type     The resource type
+     * @param LoggerInterface $logger
      *
-     * @return Boolean true if this class supports the given resource, false otherwise
+     * @return null
      */
-    public function supports($resource, $type = null);
+    public function setLogger(LoggerInterface $logger)
+    {
+        // Do nothing
+    }
+    /**
+     * @var string[]
+     */
+    private $config;
 }

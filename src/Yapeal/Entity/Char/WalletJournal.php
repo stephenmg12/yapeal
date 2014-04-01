@@ -10,16 +10,17 @@ use Yapeal\Entity\Types;
  *
  * @ORM\Table(name="char_WalletJournal")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class WalletJournal extends AbstractCharacterOwner
 {
     /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     * @ORM\Id
+     * Constructor
      */
-    private $refID;
+    public function __construct()
+    {
+        bcscale(2);
+    }
     /**
      * @var integer
      * @ORM\Column(type="smallint")
@@ -77,6 +78,12 @@ class WalletJournal extends AbstractCharacterOwner
     private $reason;
     /**
      * @var integer
+     * @ORM\Column(type="bigint")
+     * @ORM\Id
+     */
+    private $refID;
+    /**
+     * @var integer
      * @ORM\Column(name="refTypeID", type="integer")
      */
     private $refTypeID;
@@ -90,11 +97,4 @@ class WalletJournal extends AbstractCharacterOwner
      * @ORM\Column(type="bigint", nullable=true)
      */
     private $taxReceiverID;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        bcscale(2);
-    }
 }

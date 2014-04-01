@@ -5,7 +5,7 @@
  * PHP version 5.3
  *
  * LICENSE:
- * This file is part of Yet Another Php Eve Api Library also know as src which can be used to access the Eve Online
+ * This file is part of Yet Another Php Eve Api Library also know as Yapeal which can be used to access the Eve Online
  * API data and place it into a database.
  * Copyright (C) 2013  Michael Cummings
  *
@@ -34,8 +34,35 @@ namespace Yapeal\Configuration;
 /**
  * ConfigFactoryInterface interface.
  *
- * @package src\Configuration
+ * @package Yapeal\Configuration
  */
 interface ConfigFactoryInterface
 {
+    /**
+     * constants
+     */
+    const INI = 'ini';
+    const JSON = 'json';
+    const PHP = 'php';
+    const URL = 'url';
+    const XML = 'xml';
+    /**
+     * @param string $type
+     *
+     * @return ConfigHandlerInterface
+     */
+    public function getHandler($type);
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
+    public function haveHandler($type);
+    /**
+     * @param string                 $type
+     * @param ConfigHandlerInterface $handler
+     *
+     * @return self
+     */
+    public function setHandler($type, ConfigHandlerInterface $handler);
 }

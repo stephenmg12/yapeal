@@ -9,19 +9,19 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_MailBodies")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class MailBodies extends AbstractCharacterOwner
 {
+    /**
+     * @var string
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $body;
     /**
      * @var integer
      * @ORM\Column(type="bigint")
      * @ORM\Id
      */
     private $messageID;
-    /**
-     * @var string
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $body;
 }

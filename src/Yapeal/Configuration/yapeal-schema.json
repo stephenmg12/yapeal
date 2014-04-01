@@ -1,43 +1,52 @@
 {
-    "type":       "object",
-    "$schema":    "http://json-schema.org/draft-04/schema",
-    "required":   ["yapeal"],
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "required": ["yapeal"],
     "properties": {
         "yapeal": {
-            "type":       "object",
-            "required":   ["Cache", "Database", "Logging", "registered_mode"],
+            "type": "object",
+            "required": ["registered_mode", "Cache", "Database", "Logging"],
             "properties": {
-                "Cache":             {
-                    "type":       "object",
+                "application_agent": {
+                    "type": "string",
+                    "default": "{application_agent} Yapeal/{version} {stability} ({OS} {arch}) libcurl/{curl_version}"
+                },
+                "registered_mode": {
+                    "type": "string",
+                    "enum": ["ignored", "optional", "required"]
+                },
+                "Cache": {
+                    "type": "object",
                     "properties": {
+                        "dir": {
+                            "type": "string",
+                            "default": "{libraryBase}/cache"
+                        },
                         "interval": {
-                            "type":    "number",
+                            "type": "integer",
                             "minimum": 0,
                             "maximum": 366,
                             "default": 7
                         },
-                        "to":       {
-                            "enum":    ["none", "file", "database", "both"],
+                        "to": {
+                            "type": "string",
+                            "enum": ["none", "file", "database", "both"],
                             "default": "file"
-                        },
-                        "dir":      {
-                            "type":    "string",
-                            "default": "{libraryBase}/cache"
                         }
                     },
-                    "required":   ["interval", "to"]
+                    "required": ["interval", "to"]
                 },
-                "Database":          {
-                    "type":  "object",
+                "Database": {
+                    "type": "object",
                     "oneOf": [
                         {
                             "properties": {
-                                "dbname":   {
-                                    "type":    "string",
+                                "dbname": {
+                                    "type": "string",
                                     "default": "yapeal"
                                 },
-                                "host":     {
-                                    "type":  "string",
+                                "host": {
+                                    "type": "string",
                                     "oneOf": [
                                         {
                                             "format": "host-name"
@@ -51,35 +60,35 @@
                                     ]
                                 },
                                 "password": {
-                                    "type":    "string",
+                                    "type": "string",
                                     "default": "secret"
                                 },
-                                "port":     {
-                                    "type":    "integer",
+                                "port": {
+                                    "type": "integer",
                                     "minimum": 0,
                                     "maximum": 65535
                                 },
-                                "prefix":   {
-                                    "enum":    ["mysql", "pgsql"],
+                                "prefix": {
+                                    "enum": ["mysql", "pgsql"],
                                     "default": "mysql"
                                 },
-                                "user":     {
-                                    "type":    "string",
+                                "user": {
+                                    "type": "string",
                                     "default": "YapealUser"
                                 }
                             },
-                            "required":   ["prefix", "host", "password", "user"]
+                            "required": ["prefix", "host", "password", "user"]
                         },
                         {
                             "properties": {
                                 "prefix": {
                                     "enum": ["sqlite"]
                                 },
-                                "file":   {
+                                "file": {
                                     "type": "string"
                                 }
                             },
-                            "required":   ["prefix", "file"]
+                            "required": ["prefix", "file"]
                         },
                         {
                             "properties": {
@@ -90,36 +99,29 @@
                                     "enum": ["memory:"]
                                 }
                             },
-                            "required":   ["prefix", "memory"]
+                            "required": ["prefix", "memory"]
                         }
                     ]
                 },
-                "Logging":           {
-                    "type":       "object",
-                    "required":   ["dir"],
+                "Logging": {
+                    "type": "object",
+                    "required": ["dir", "level"],
                     "properties": {
-                        "dir":    {
-                            "type":    "string",
+                        "dir": {
+                            "type": "string",
                             "default": "{libraryBase}/logs"
                         },
-                        "level":  {
-                            "type":    "number",
-                            "minimum": 0,
-                            "maximum": 32767,
-                            "default": 32767
+                        "level": {
+                            "type": "string",
+                            "enum": ["emergency", "alert", "critical", "error",
+                                "warning", "notice", "info", "debug"],
+                            "default": "warning"
                         },
                         "locale": {
-                            "type":    "string",
+                            "type": "string",
                             "default": "en_US"
                         }
                     }
-                },
-                "application_agent": {
-                    "type":    "string",
-                    "default": null
-                },
-                "registered_mode":   {
-                    "enum": ["ignored", "optional", "required"]
                 }
             }
         }

@@ -37,22 +37,29 @@ $conn = array(
     'password' => 'secret',
     'host' => 'localhost',
     'dbname' => 'yapeal',
-    'charset' => 'UTF-8'
+    'charset' => 'utf8'
 );
 // Register my types
-Type::addType('ISK', 'src\Entity\Types\ISKType');
+Type::addType('ISK', 'Yapeal\Entity\Types\ISKType');
 // obtaining the entity manager
 $entityManager = EntityManager::create($conn, $config);
 $con = $entityManager->getConnection();
 $con->getDatabasePlatform()
     ->registerDoctrineTypeMapping('decimal', 'ISK');
-$helperSet = new SHelper\HelperSet(array(
-    'db' => new Helper\ConnectionHelper($con),
-    'dialog' => new SHelper\DialogHelper(),
-    'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($entityManager)
-));
+$helperSet = new SHelper\HelperSet(
+    array(
+        'db' => new Helper\ConnectionHelper($con),
+        'dialog' => new SHelper\DialogHelper(),
+        'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper(
+            $entityManager
+        )
+    )
+);
 $cli =
-    new Application('Doctrine Command Line Interface', \Doctrine\ORM\Version::VERSION);
+    new Application(
+        'Doctrine Command Line Interface',
+        \Doctrine\ORM\Version::VERSION
+    );
 $cli->setCatchExceptions(true);
 $cli->setHelperSet($helperSet);
 $cli->addCommands(

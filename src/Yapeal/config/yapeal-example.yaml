@@ -1,0 +1,105 @@
+---
+yapeal:
+    #####
+    # REQUIRED Sections: Cache, Database, Logging.
+    #####
+
+    # NOTE: In the follow examples the built-in defaults are shown.
+
+    # Application agent string used as part of the HTTP User Agent header.
+    #
+    # Though optional use of this setting is highly recommended and should
+    # follow RFC 1945 or the extended format used by Mozilla which is documented
+    # at https://developer.mozilla.org/en/User_Agent_Strings_Reference
+    #
+    # Note that an agent string for Yapeal and libcurl will be appended
+    # automatically for all API requests.
+    # i.e. " Yapeal/{version} {stability} ({OS} {arch}) libcurl/{curl_version}"
+    #
+    # application_agent: "{application_agent} Yapeal/{version} {stability} ({OS} {arch}) libcurl/{curl_version}"
+
+    # Sets mode for RegisteredCharacter/Corporation entries.
+    #
+    # There are three modes possible: "required", "optional", "ignored"
+    #
+    # required - This mode is the most like the traditional mode of Yapeal where a
+    # row had to exist in utilRegisteredCharacter to have char APIs retrieved. The
+    # same was true for corp APIs and utilRegisteredCorporation.
+    #
+    # optional - This mode looks to see if there is a row like required does and
+    # uses any found but if there isn't a row it just uses the masks from
+    # utilSections and utilRegisteredKey tables along with one reported in
+    # APIKeyInfo API table.
+    #
+    # ignored - Only uses the masks from key in APIKeyInfo API table and the
+    # utilSections and utilRegisteredKey tables ignoring any entries in the other
+    # utilRegistered* tables.
+    #
+    # The above only talks about the mask from the tables but all the other settings
+    # in each table follow the same pattern, i.e. the proxy column would have no
+    # effect when the mode is set to ignore.
+    #
+    # registered_mode: "optional"
+
+    # Section for cache settings. (required)
+    # WARNING: Yapeal will not work with this section missing.
+    Cache:
+
+        # Directory where EVE API XML files will be cached.
+        #
+        # dir: "{libraryBase}/cache"
+
+        # Length of time to cache EVE API XML for in days.
+        #
+        # interval: 7
+
+        # Where you want EVE API XML cache output to go.
+        # One of "none", "file", "database", or "both"
+        #
+        # to: "file"
+
+    # Section for database settings. (required)
+    # WARNING: Yapeal will not work with this section missing.
+    Database:
+
+        # Database name.
+        #
+        # dbname: "yapeal"
+
+        # Database engine.
+        #
+        # prefix: "mysql"
+
+        # Host name for Database.
+        #
+        # host: "localhost"
+
+        # User name with write access.
+        # Needs minimum of select, insert, and update SQL access.
+        #
+        # user: "YapealUser"
+
+        # Password for user.
+        #
+        # password: "secret"
+
+    # Logging settings (required)
+    # WARNING: Yapeal will not work with this section missing.
+    Logging:
+
+        # Directory where logs are put.
+        #
+        # dir: "{libraryBase}/logs"
+
+        # Locale to use for log messages. (unused, reserved)
+        #
+        # locale: "en_US"
+
+        # Used to set minimum logging level. (unused, reserved)
+        # Allowed values:
+        # "emergency", "alert", "critical", "error", "warning", "notice",
+        # "info", "debug"
+        # Recommended during testing - level: "debug"
+        # In production - level: "notice" || level: "warning"
+        #
+        # level: "warning"

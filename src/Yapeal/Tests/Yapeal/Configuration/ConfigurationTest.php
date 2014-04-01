@@ -5,55 +5,73 @@ use org\bovigo\vfs as VFS;
 use PHPUnit_Framework_TestCase;
 use Yapeal\Configuration\Configuration;
 
+/**
+ * Class ConfigurationTest
+ *
+ * @package Yapeal\Tests\Yapeal\Configuration
+ */
 class ConfigurationTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @var string
-     */
-    private $libraryPath;
-    /**
-     * @var VFS\vfsStreamContent
-     */
-    private $vfs;
     public function setUp()
     {
         $yapealTemplate = file_get_contents(
-            __DIR__ . '../../../../Configuration/yapeal-template.json'
+            dirname(dirname(dirname(__DIR__)))
+            . '/Configuration/yapeal-defaults.yaml'
         );
         $structure = array(
             'src' => array(
-                'config' => array(
-                    'yapeal.ini' => 'bogus',
-                    'yapeal.json' => 'bogus',
-                    'yapeal-example.json' => 'bogus'
-                ),
-                'Configuration' => array(
-                    'yapeal-template.json' => $yapealTemplate,
-                    'yapeal-schema.json' => 'bogus'
+                'Yapeal' => array(
+                    'config' => array(
+                        'yapeal.ini' => 'bogus',
+                        'yapeal.json' => 'bogus',
+                        'yapeal-example.json' => 'bogus'
+                    ),
+                    'Configuration' => array(
+                        'yapeal-defaults.yaml' => $yapealTemplate,
+                        'yapeal-schema.json' => 'bogus'
+                    )
                 )
             ),
             'config' => array(
-                'yapeal.json' => 'bogus'
+                'yapeal.json' => 'bogus',
+                'yapeal-example.json' => 'bogus'
+            ),
+            'my' => array(
+                'web' => array(
+                    'app' => array(
+                        'vendor' => array(
+                            'Yapeal' => array(
+                                'Configuration' => array()
+                            )
+                        ),
+                        'src' => array(
+                            'my-app' => array(
+                                'Config' => array()
+                            )
+                        )
+                    )
+                )
             )
         );
         $this->vfs = VFS\vfsStream::setup('phpUnit', null, $structure);
-        $this->libraryPath = $this->vfs->url() . '/src/Configuration';
+        $this->configPath = $this->vfs->url() . '/src/Yapeal/Configuration';
     }
     public function testAddConfigFilesWhenFilesParamIsArray()
     {
-        $input = '{libraryBase}/config/yapeal-example.json';
-        $expectedResult = $this->vfs->url() . '/src/config/yapeal.ini';
-        $config = new Configuration(null, null, $this->libraryPath);
+        $expectedResult = $this->configPath . '/yapeal-defaults.yaml';
+        $config = new Configuration(null, null, $this->configPath);
         $this->assertAttributeContains($expectedResult, 'configFiles', $config);
+        $input = '{libraryBase}/config/yapeal-example.json';
         $config->addConfigFiles((array)$input);
-        $expectedResult = $this->vfs->url() . '/src/config/yapeal-example.json';
+        $expectedResult = $this->vfs->url() . '/config/yapeal-example.json';
         $this->assertAttributeContains($expectedResult, 'configFiles', $config);
     }
     public function testAddConfigFilesWhenFilesParamIsString()
     {
         $input = '{libraryBase}/config/yapeal-example.json';
-        $expectedResult = $this->vfs->url() . '/src/config/yapeal-example.json';
-        $config = new Configuration(null, null, $this->libraryPath);
+        $expectedResult =
+            $this->vfs->url() . '/config/yapeal-example.json';
+        $config = new Configuration(null, null, $this->configPath);
         $config->addConfigFiles($input);
         $this->assertAttributeContains($expectedResult, 'configFiles', $config);
     }
@@ -61,20 +79,20 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         $input = '{libraryBase}/config/yapeal-example.json';
         $expectedResult =
-            array($this->vfs->url() . '/src/config/yapeal-example.json');
-        $config = new Configuration((array)$input, null, $this->libraryPath);
+            array($this->vfs->url() . '/config/yapeal-example.json');
+        $config = new Configuration((array)$input, null, $this->configPath);
         $this->assertAttributeEquals($expectedResult, 'configFiles', $config);
     }
     public function testConstructorWhenFilesParamIsArrayWithInvalidTypeElement()
     {
         $logger = $this->getMockBuilder('Psr\Log\NullLogger')
-            ->disableOriginalConstructor()
-            ->getMock();
+                       ->disableOriginalConstructor()
+                       ->getMock();
         $logger->expects($this->atLeastOnce())
-            ->method('log');
+               ->method('log');
         $input = array(1.0);
         $expectedResult = array(1.0);
-        $config = new Configuration($input, $logger, $this->libraryPath);
+        $config = new Configuration($input, $logger, $this->configPath);
         $this->assertAttributeNotContains(
             $expectedResult,
             'configFiles',
@@ -84,13 +102,13 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     public function testConstructorWhenFilesParamIsInvalidType()
     {
         $logger = $this->getMockBuilder('Psr\Log\NullLogger')
-            ->disableOriginalConstructor()
-            ->getMock();
+                       ->disableOriginalConstructor()
+                       ->getMock();
         $logger->expects($this->atLeastOnce())
-            ->method('log');
+               ->method('log');
         $input = 1.0;
         $expectedResult = 1.0;
-        $config = new Configuration($input, $logger, $this->libraryPath);
+        $config = new Configuration($input, $logger, $this->configPath);
         $this->assertAttributeNotContains(
             $expectedResult,
             'configFiles',
@@ -99,21 +117,21 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     }
     public function testConstructorWhenFilesParamIsString()
     {
-        $input = '{libraryBase}/config/yapeal.ini';
-        $expectedResult = array($this->vfs->url() . '/src/config/yapeal.ini');
-        $config = new Configuration($input, null, $this->libraryPath);
+        $input = '{libraryBase}/config/yapeal.json';
+        $expectedResult = array($this->vfs->url() . '/config/yapeal.json');
+        $config = new Configuration($input, null, $this->configPath);
         $this->assertAttributeEquals($expectedResult, 'configFiles', $config);
     }
     public function testSetConfigFilesDoesNotAllowAbsoluteDirectoryPathString()
     {
         $logger = $this->getMockBuilder('Psr\Log\NullLogger')
-            ->disableOriginalConstructor()
-            ->getMock();
+                       ->disableOriginalConstructor()
+                       ->getMock();
         $logger->expects($this->atLeastOnce())
-            ->method('log');
+               ->method('log');
         $input = '/config/yapeal-example.json';
         $expectedResult = $input;
-        $config = new Configuration(null, $logger, $this->libraryPath);
+        $config = new Configuration(null, $logger, $this->configPath);
         $config->setConfigFiles($input);
         $this->assertAttributeNotContains(
             $expectedResult,
@@ -125,13 +143,13 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     )
     {
         $logger = $this->getMockBuilder('Psr\Log\NullLogger')
-            ->disableOriginalConstructor()
-            ->getMock();
+                       ->disableOriginalConstructor()
+                       ->getMock();
         $logger->expects($this->atLeastOnce())
-            ->method('log');
+               ->method('log');
         $input = '{vendorParent}/{libraryBase}/config/yapeal-example.json';
         $expectedResult = $input;
-        $config = new Configuration(null, $logger, $this->libraryPath);
+        $config = new Configuration(null, $logger, $this->configPath);
         $config->setConfigFiles($input);
         $this->assertAttributeNotContains(
             $expectedResult,
@@ -142,13 +160,13 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     public function testSetConfigFilesDoesNotAllowUnknownUriTemplatePathString()
     {
         $logger = $this->getMockBuilder('Psr\Log\NullLogger')
-            ->disableOriginalConstructor()
-            ->getMock();
+                       ->disableOriginalConstructor()
+                       ->getMock();
         $logger->expects($this->atLeastOnce())
-            ->method('log');
+               ->method('log');
         $input = '{Bogus}/config/yapeal-example.json';
         $expectedResult = $input;
-        $config = new Configuration(null, $logger, $this->libraryPath);
+        $config = new Configuration(null, $logger, $this->configPath);
         $config->setConfigFiles($input);
         $this->assertAttributeNotContains(
             $expectedResult,
@@ -159,13 +177,13 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     public function testSetConfigFilesDoesNotAllowUpDirectoryPathString()
     {
         $logger = $this->getMockBuilder('Psr\Log\NullLogger')
-            ->disableOriginalConstructor()
-            ->getMock();
+                       ->disableOriginalConstructor()
+                       ->getMock();
         $logger->expects($this->atLeastOnce())
-            ->method('log');
+               ->method('log');
         $input = '{libraryBase}/../config/yapeal-example.json';
         $expectedResult = $input;
-        $config = new Configuration(null, $logger, $this->libraryPath);
+        $config = new Configuration(null, $logger, $this->configPath);
         $config->setConfigFiles($input);
         $this->assertAttributeNotContains(
             $expectedResult,
@@ -177,7 +195,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         $input = '{libraryBase}/config/yapeal-example.ini';
         $expectedResult = $this->vfs->url() . '/src/config/yapeal-example.ini';
-        $config = new Configuration(null, null, $this->libraryPath);
+        $config = new Configuration(null, null, $this->configPath);
         $config->setConfigFiles($input);
         $this->assertAttributeNotContains(
             $expectedResult,
@@ -188,40 +206,51 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     public function testSetConfigFilesWithPathStringAndFileExists()
     {
         $input = '{libraryBase}/config/yapeal-example.json';
-        $expectedResult = $this->vfs->url() . '/src/config/yapeal-example.json';
-        $config = new Configuration(null, null, $this->libraryPath);
+        $expectedResult =
+            array($this->vfs->url() . '/config/yapeal-example.json');
+        $config = new Configuration(null, null, $this->configPath);
         $config->setConfigFiles($input);
-        $this->assertAttributeContains($expectedResult, 'configFiles', $config);
+        $this->assertAttributeEquals($expectedResult, 'configFiles', $config);
     }
     public function testSetLibraryBase()
     {
-        $input = '/my/web/app/src/Configuration';
-        $expectedResult = '/my/web/app/src';
+        $input = $this->vfs->url() . '/my/web/app/src/my-app/Config';
+        $expectedResult = $this->vfs->url() . '/my/web/app';
         $config = new Configuration();
         $config->setLibraryBase($input);
         $this->assertAttributeEquals($expectedResult, 'libraryBase', $config);
-        $expectedResult = '/my/web/app';
         $this->assertAttributeEquals($expectedResult, 'vendorParent', $config);
-        $expectedResult = $input;
-        $config->setLibraryBase($input, 'Configuration');
+        $expectedResult = $this->vfs->url() . '/my/web/app/src/my-app';
+        $config->setLibraryBase($input, 'Config');
         $this->assertAttributeEquals($expectedResult, 'libraryBase', $config);
-        $input = '/my/web/app/vendor/src/src/src/Configuration';
-        $expectedResult = '/my/web/app/vendor/src';
+        $input =
+            $this->vfs->url() . '/my/web/app/vendor/src/src/src/Configuration';
+        $expectedResult = $this->vfs->url() . '/my/web/app/vendor';
         $config->setLibraryBase($input);
         $this->assertAttributeEquals($expectedResult, 'libraryBase', $config);
-        $expectedResult = '/my/web/app';
+        $expectedResult = $this->vfs->url() . '/my/web/app';
         $this->assertAttributeEquals($expectedResult, 'vendorParent', $config);
     }
     public function testSetVendorParent()
     {
-        $input = '/my/web/app/src/Configuration';
+        $input =
+            $this->vfs->url() . '/my/web/app/vendor/Yapeal/Configuration';
         $config = new Configuration();
         $config->setVendorParent($input, 'src');
-        $expectedResult = '/my/web/app';
+        $expectedResult = $this->vfs->url() . '/my/web/app';
         $this->assertAttributeEquals($expectedResult, 'vendorParent', $config);
-        $input = '/my/web/app/vendor/src/src/src/Configuration';
+        $input =
+            $this->vfs->url() . '/my/web/app/src/my-app/Config';
         $config->setVendorParent($input);
-        $expectedResult = '/my/web/app';
+        $expectedResult = $this->vfs->url() . '/my/web/app';
         $this->assertAttributeEquals($expectedResult, 'vendorParent', $config);
     }
+    /**
+     * @var string
+     */
+    private $configPath;
+    /**
+     * @var VFS\vfsStreamContent
+     */
+    private $vfs;
 }

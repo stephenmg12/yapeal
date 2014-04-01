@@ -9,10 +9,15 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_Items")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class Items
 {
+    /**
+     * @var integer
+     * @ORM\Column(type="smallint")
+     */
+    private $flag;
     /**
      * @var integer
      * @ORM\JoinColumn(name="killID", referencedColumnName="killID", nullable=false, onDelete="restrict")
@@ -28,11 +33,6 @@ class Items
     private $lft;
     /**
      * @var integer
-     * @ORM\Column(type="smallint")
-     */
-    private $flag;
-    /**
-     * @var integer
      * @ORM\Column(type="integer")
      */
     private $lvl;
@@ -40,7 +40,7 @@ class Items
      * @var integer
      * @ORM\Column(type="bigint")
      */
-    private $rgt;
+    private $qtyDestroyed;
     /**
      * @var integer
      * @ORM\Column(type="bigint")
@@ -50,7 +50,7 @@ class Items
      * @var integer
      * @ORM\Column(type="bigint")
      */
-    private $qtyDestroyed;
+    private $rgt;
     /**
      * @var integer
      * @ORM\Column(type="smallint")

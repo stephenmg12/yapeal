@@ -9,10 +9,16 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_SkillInTraining")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class SkillInTraining extends AbstractCharacterOwner
 {
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    }
     /**
      * @var \DateTime
      * @ORM\Column(type="datetime", nullable=true)
@@ -58,10 +64,4 @@ class SkillInTraining extends AbstractCharacterOwner
      * @ORM\Column(type="bigint")
      */
     private $trainingTypeID;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-    }
 }

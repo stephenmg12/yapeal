@@ -11,10 +11,22 @@ use Yapeal\Entity\Types;
  *
  * @ORM\Table(name="char_CharacterSheet")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class CharacterSheet extends Entity\AbstractCharacter
 {
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        bcscale(2);
+    }
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     */
+    private $DoB;
     /**
      * @var integer
      * @ORM\Column(type="bigint", nullable=true)
@@ -41,6 +53,11 @@ class CharacterSheet extends Entity\AbstractCharacter
      */
     private $bloodLine;
     /**
+     * @var integer
+     * @ORM\Column(type="smallint")
+     */
+    private $charisma;
+    /**
      * @var string
      * @ORM\Column(type="string", length=50)
      */
@@ -51,25 +68,10 @@ class CharacterSheet extends Entity\AbstractCharacter
      */
     private $cloneSkillPoints;
     /**
-     * @var \DateTime
-     * @ORM\Column(type="datetime")
-     */
-    private $DoB;
-    /**
      * @var string
      * @ORM\Column(type="string", length=10)
      */
     private $gender;
-    /**
-     * @var string
-     * @ORM\Column(type="string", length=50)
-     */
-    private $race;
-    /**
-     * @var integer
-     * @ORM\Column(type="smallint")
-     */
-    private $charisma;
     /**
      * @var integer
      * @ORM\Column(type="smallint")
@@ -86,15 +88,13 @@ class CharacterSheet extends Entity\AbstractCharacter
      */
     private $perception;
     /**
+     * @var string
+     * @ORM\Column(type="string", length=50)
+     */
+    private $race;
+    /**
      * @var integer
      * @ORM\Column(type="smallint")
      */
     private $willpower;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        bcscale(2);
-    }
 }

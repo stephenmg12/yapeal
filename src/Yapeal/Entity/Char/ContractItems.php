@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_ContractItems")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class ContractItems
 {
@@ -28,16 +28,10 @@ class ContractItems
      */
     private $dummyContract;
     /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     * @ORM\Id
+     * @var boolean
+     * @ORM\Column(type="boolean")
      */
-    private $recordID;
-    /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     */
-    private $typeID;
+    private $included;
     /**
      * @var integer
      * @ORM\Column(type="bigint")
@@ -49,13 +43,19 @@ class ContractItems
      */
     private $rawQuantity = 0;
     /**
+     * @var integer
+     * @ORM\Column(type="bigint")
+     * @ORM\Id
+     */
+    private $recordID;
+    /**
      * @var boolean
      * @ORM\Column(type="boolean")
      */
     private $singleton;
     /**
-     * @var boolean
-     * @ORM\Column(type="boolean")
+     * @var integer
+     * @ORM\Column(type="bigint")
      */
-    private $included;
+    private $typeID;
 }

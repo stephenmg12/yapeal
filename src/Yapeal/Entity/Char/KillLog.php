@@ -10,36 +10,17 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_KillLog")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class KillLog extends AbstractCharacterOwner
 {
     /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     * @ORM\Id
+     * Constructor
      */
-    private $killID;
-    /**
-     * @var \DateTime
-     * @ORM\Column(type="datetime")
-     */
-    private $killTime;
-    /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     */
-    private $moonID;
-    /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     */
-    private $solarSystemID;
-    /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     */
-    private $characterID = 0;
+    public function __construct()
+    {
+        $this->attackers = new Collections\ArrayCollection();
+    }
     /**
      * @var integer
      * @ORM\Column(type="bigint")
@@ -50,6 +31,16 @@ class KillLog extends AbstractCharacterOwner
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     private $allianceName;
+    /**
+     * @var Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Attackers", mappedBy="killID")
+     */
+    private $attackers;
+    /**
+     * @var integer
+     * @ORM\Column(type="bigint")
+     */
+    private $characterID = 0;
     /**
      * @var string
      * @ORM\Column(type="string", length=24, nullable=true)
@@ -81,25 +72,34 @@ class KillLog extends AbstractCharacterOwner
      */
     private $factionName;
     /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     */
-    private $shipTypeID;
-    /**
-     * @var Collections\ArrayCollection
-     * @ORM\OneToMany(targetEntity="Attackers", mappedBy="killID")
-     */
-    private $attackers;
-    /**
      * @var Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Items", mappedBy="killID")
      */
     private $items;
     /**
-     * Constructor
+     * @var integer
+     * @ORM\Column(type="bigint")
+     * @ORM\Id
      */
-    public function __construct()
-    {
-        $this->attackers = new Collections\ArrayCollection();
-    }
+    private $killID;
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     */
+    private $killTime;
+    /**
+     * @var integer
+     * @ORM\Column(type="bigint")
+     */
+    private $moonID;
+    /**
+     * @var integer
+     * @ORM\Column(type="bigint")
+     */
+    private $shipTypeID;
+    /**
+     * @var integer
+     * @ORM\Column(type="bigint")
+     */
+    private $solarSystemID;
 }

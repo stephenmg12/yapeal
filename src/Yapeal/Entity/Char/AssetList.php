@@ -9,21 +9,21 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="char_AssetList")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class AssetList extends AbstractCharacterOwner
 {
+    /**
+     * @var integer
+     * @ORM\Column(type="smallint")
+     */
+    private $flag = 0;
     /**
      * @var integer
      * @ORM\Column(type="bigint")
      * @ORM\Id
      */
     private $itemID;
-    /**
-     * @var integer
-     * @ORM\Column(type="smallint")
-     */
-    private $flag = 0;
     /**
      * @var integer
      * @ORM\Column(type="bigint")

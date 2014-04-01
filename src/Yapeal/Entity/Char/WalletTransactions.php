@@ -10,16 +10,17 @@ use Yapeal\Entity\Types;
  *
  * @ORM\Table(name="char_WalletTransactions")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class WalletTransactions extends AbstractCharacterOwner
 {
     /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     * @ORM\Id
+     * Constructor
      */
-    private $transactionID;
+    public function __construct()
+    {
+        bcscale(2);
+    }
     /**
      * @var integer
      * @ORM\Column(type="smallint")
@@ -71,6 +72,12 @@ class WalletTransactions extends AbstractCharacterOwner
      */
     private $transactionFor;
     /**
+     * @var integer
+     * @ORM\Column(type="bigint")
+     * @ORM\Id
+     */
+    private $transactionID;
+    /**
      * @var string
      * @ORM\Column(type="string", length=4)
      */
@@ -85,11 +92,4 @@ class WalletTransactions extends AbstractCharacterOwner
      * @ORM\Column(type="string", length=50)
      */
     private $typeName;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        bcscale(2);
-    }
 }

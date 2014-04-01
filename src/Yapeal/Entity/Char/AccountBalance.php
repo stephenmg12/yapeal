@@ -10,26 +10,10 @@ use Yapeal\Entity\Types;
  *
  * @ORM\Table(name="char_AccountBalance")
  * @ORM\Entity
- * @package src\Entity\Char
+ * @package Yapeal\Entity\Char
  */
 class AccountBalance extends AbstractCharacterOwner
 {
-    /**
-     * @var integer
-     * @ORM\Column(type="smallint")
-     * @ORM\Id
-     */
-    private $accountKey;
-    /**
-     * @var integer
-     * @ORM\Column(type="bigint")
-     */
-    private $accountID;
-    /**
-     * @var string
-     * @ORM\Column(type="ISK")
-     */
-    private $balance;
     /**
      * Constructor
      */
@@ -37,4 +21,20 @@ class AccountBalance extends AbstractCharacterOwner
     {
         bcscale(2);
     }
+    /**
+     * @var integer
+     * @ORM\Column(type="bigint")
+     */
+    private $accountID;
+    /**
+     * @var integer
+     * @ORM\Column(type="smallint")
+     * @ORM\Id
+     */
+    private $accountKey;
+    /**
+     * @var string
+     * @ORM\Column(type="ISK")
+     */
+    private $balance;
 }
