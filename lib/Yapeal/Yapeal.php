@@ -68,7 +68,7 @@ class Yapeal
             $mess = "Yapeal requires that PHP's timezone be set to UTC";
             throw new \RuntimeException($mess);
         }
-        $this->setContainer($container);
+        $this->setDependencyContainer($container);
     }
     /**
      * Returns the version info string for Yapeal.
@@ -92,7 +92,7 @@ class Yapeal
      */
     public function configure()
     {
-        $container = $this->getContainer();
+        $container = $this->getDependencyContainer();
         if (empty($container['yapeal.configuration'])) {
             $container['yapeal.configuration.configFiles'] = array();
             $container['yapeal.configuration'] = function ($c) {
@@ -110,12 +110,12 @@ class Yapeal
     /**
      * @return Pimple
      */
-    public function getContainer()
+    public function getDependencyContainer()
     {
-        if (is_null($this->container)) {
-            $this->setContainer();
+        if (is_null($this->dependencyContainer)) {
+            $this->setDependencyContainer();
         }
-        return $this->container;
+        return $this->dependencyContainer;
     }
     /**
      * @return $this
@@ -133,16 +133,16 @@ class Yapeal
      *
      * @return self
      */
-    public function setContainer($value = null)
+    public function setDependencyContainer($value = null)
     {
-        $this->container = $value ? : new Pimple();
+        $this->dependencyContainer = $value ? : new Pimple();
         return $this;
     }
     private static $version;
     /**
      * @var Pimple $container A small Dependency Injection Container
      */
-    private $container;
+    private $dependencyContainer;
     /**
      * @var int Holds the soft limit used to keep Yapeal from overloading servers.
      */
