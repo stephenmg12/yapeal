@@ -4,9 +4,9 @@
 
 Logging in Yapeal has gone through a lot of changes over the years from using
 the settings in PHP itself to some custom designs and the latest system
-[Log4php]. Each has generally been an improve over the last but in the end I
+[Log4php][1]. Each has generally been an improve over the last but in the end I
 have never been really been happy with the result. Below I will go over some of
-my thoughts about logging and why I have decided to go with [Monolog], for
+my thoughts about logging and why I have decided to go with [Monolog][2], for
 now at least.
 
 ### Before Log4php ###
@@ -29,12 +29,12 @@ have been.
 
 ### PSR-3 ###
 
-A new standard for PHP logging has emerged called [PSR-3]. Like most of the
-[Php-Fig] standards it seems to be well thought out and of practical use as
+A new standard for PHP logging has emerged called [PSR-3][3]. Like most of the
+[Php-Fig][4] standards it seems to be well thought out and of practical use as
 well which is NOT always true with many standards you find. The nice thing about
 it is that any programmer can basically do their own thing as long as they use
 the interface included in the standard. Someone has even prototyped a
-[wrapper around log4php][1] to make it work as a PSR-3 logger. I only found this
+[wrapper around log4php][5] to make it work as a PSR-3 logger. I only found this
 today and it still does NOT solve the two configuration files issue but anyone
 else that is using log4php might find it useful.
 
@@ -59,10 +59,10 @@ So to sum it up Yapeal for now anyway is using Monolog but the main thing is it
 will be PSR-3 compatible going forward at least until / if something with an
 improved set of features comes along.
 
-[Log4php]: https://logging.apache.org/log4php/
-[Monolog]: https://github.com/Seldaek/monolog
-[PSR-3]: http://www.php-fig.org/psr/psr-3/
-[Php-Fig]: http://www.php-fig.org/
-[1]: http://www.sitepoint.com/implementing-psr-3-with-log4php/
+[1]: https://logging.apache.org/log4php/
+[2]: https://github.com/Seldaek/monolog
+[3]: http://www.php-fig.org/psr/psr-3/
+[4]: http://www.php-fig.org/
+[5]: http://www.sitepoint.com/implementing-psr-3-with-log4php/
 
 #### Author: Michael Cummings ####

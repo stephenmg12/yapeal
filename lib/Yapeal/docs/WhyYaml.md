@@ -9,9 +9,9 @@ deciding to make a change and what options I looked at.
 
 ### 'ini' Pluses ###
 
-'Ini' files of course are well understand by most people that deal with software
-configuration since they have been around at least since the start of
-DOS/Windows[1]. They can generally be understood by anyone if well designed and
+['Ini' files][1] of course are well understand by most people that deal with
+software configuration since they have been around at least since the start of
+DOS/Windows. They can generally be understood by anyone if well designed and
 commented and are simple to make.
 
 ### 'ini' Minuses
@@ -26,10 +26,10 @@ requirement placed on they except for what the software parsing them enforces.
 ### 'xml' Pluses ###
 
 There is of course good old XML which is very good at complex structures and
-easily parse by software. There is a [XML standard] as well. Some people like
+easily parse by software. There is a [XML standard][2] as well. Some people like
 me find it relatively easy to understand and work with. There is some
 enforcement of what is allowed in tags and values. You can have some validation
-with [XSD schema] files which can be used to increase the enforcement of keys
+with [XSD schema][3] files which can be used to increase the enforcement of keys
 and values and are themselves also XML. There are ways to add documentation
 (metadata) to XML files to help someone that is making changes to settings in
 them manually.
@@ -60,9 +60,9 @@ run and even report that something is wrong.
 
 Json is a good format for configuration and fairly compact as well. It can
 handle complex structures well and most people find them relatively easy to
-understand if designed with care. There is a [Json] standard which is very
+understand if designed with care. There is a [Json][4] standard which is very
 easy to understand since it is only one page. Keys and values do have structure
-and values can even have 'types'. There is even a [Json schema] standard in
+and values can even have 'types'. There is even a [Json schema][5] standard in
 the works which allows validation and enforcement of the structure.
 
 
@@ -78,14 +78,14 @@ most people will find using it for settings harder than it should be.
 Yaml was made to be human readable first and foremost. None of the other formats
 were. Documentation ia allowed and uses a pseudo-standard format (C comments)
 that most programmers already know and anyone can easily understand. There is a
-[Yaml spec] or standard also. It can handle complex structures as well since it
+[Yaml spec][6] or standard also. It can handle complex structures as well since it
 is a super-set of Json. It also shares the same or has even higher compactness
 than Json in some cases.
 
 ### 'yaml' Minuses ###
 
 There is no Yaml schema standard for validating them though there are some
-[Yaml validators] out there that can be used. This is less of a issue in
+[Yaml validators][7] out there that can be used. This is less of a issue in
 Yapeal due to some design decisions but could cause some problems if Yapeal is
 NOT designed in a way to some how help point towards why a setting is NOT
 correct to the person making manual changes or for possible formatting problems.
@@ -99,11 +99,11 @@ needed changes can be done and any developers using Yapeal can extend or add to
 it and have their configuration in a different format if they choose to.
 
 [1]: http://en.wikipedia.org/wiki/INI_file
-[XML standard]: http://www.w3.org/TR/REC-xml/
-[XSD schema]: http://en.wikipedia.org/wiki/XML_Schema_%28W3C%29
-[Json]: http://www.json.org/
-[Json schema]: http://json-schema.org/
-[Yaml spec]: http://yaml.org/spec/
-[Yaml validators]: http://stackoverflow.com/questions/287346/yaml-validation
+[2]: http://www.w3.org/TR/REC-xml/
+[3]: http://en.wikipedia.org/wiki/XML_Schema_%28W3C%29
+[4]: http://www.json.org/
+[5]: http://json-schema.org/
+[6]: http://yaml.org/spec/
+[7]: http://stackoverflow.com/questions/287346/yaml-validation
 
 #### Author: Michael Cummings ####

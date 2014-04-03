@@ -27,7 +27,7 @@ points above they seem to be largely in agreement. Many other existing projects
 have come up with their own styling guides and wrote them up for others to use
 but finally a group which includes members from multiple projects as well as
 others interested programmers have come up with a couple of new standards. They
-come from [Php-Fig]. Like most standards from php-fig IMHO they are well
+come from [Php-Fig][1]. Like most standards from php-fig IMHO they are well
 thought out and usable.
 
 ## PSR-1/PSR-2 ##
@@ -39,7 +39,7 @@ Yapeal also does NOT follow the stuff about namespaces and PSR-0 auto-loading
 since it was made to work with PHP < 5.3 when namespaces were added. PSR-2 is
 more what most people think of as a coding style. Yapeal like probably most
 projects followed some of these and not others. Many IDE editors now have
-PSR-1/PSR-2 style reformatting included like the newer versions of [PhpStorm]
+PSR-1/PSR-2 style reformatting included like the newer versions of [PhpStorm][2]
 do which is what I use. I expect most, if not all, programmer editors / IDEs
 will do the same thing in the future. In PhpStorm with them included the PSR
 standards as built-in selectable styles etc. and it's already very good code
@@ -52,7 +52,7 @@ want to submit to Yapeal.
 
 So to summarize, Yapeal going forward will use PSR-1/PSR-2 for it's code styling.
 
-[Php-Fig]: http://www.php-fig.org/
-[PhpStorm]: http://www.jetbrains.com/phpstorm/
+[1]: http://www.php-fig.org/
+[2]: http://www.jetbrains.com/phpstorm/
 
 #### Author: Michael Cummings ####
