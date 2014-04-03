@@ -147,12 +147,12 @@ class Configuration implements ConfigurationInterface, LoggerAwareInterface
         $this->configFiles = array();
         if (is_null($files)) {
             $files = array(
-                $this->libraryBase
-                . '/lib/Yapeal/Configuration/yapeal-defaults.yaml',
                 $this->libraryBase . '/lib/Yapeal/config/yapeal.ini',
                 $this->libraryBase . '/lib/Yapeal/config/yapeal.json',
+                $this->libraryBase . '/lib/Yapeal/config/yapeal.yaml',
                 $this->vendorParent . '/config/yapeal.ini',
-                $this->vendorParent . '/config/yapeal.json'
+                $this->vendorParent . '/config/yapeal.json',
+                $this->vendorParent . '/config/yapeal.yaml'
             );
         }
         return $this->addConfigFiles($files);

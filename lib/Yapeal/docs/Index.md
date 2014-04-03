@@ -10,7 +10,7 @@ chooses made in Yapeal.
 - [Why Monolog][3]
 - [Why Yaml][4]
 
-[1]: https://sourceforge.net/p/yapeal/code/ci/master/tree/src/Yapeal/docs/CodingStyle.md
-[2]: https://sourceforge.net/p/yapeal/code/ci/master/tree/src/Yapeal/docs/UsingStandards.md
-[3]: https://sourceforge.net/p/yapeal/code/ci/master/tree/src/Yapeal/docs/WhyMonolog.md
-[4]: https://sourceforge.net/p/yapeal/code/ci/master/tree/src/Yapeal/docs/WhyYaml.md
+[1]: https://sourceforge.net/p/yapeal/code/ci/master/tree/lib/Yapeal/docs/CodingStyle.md
+[2]: https://sourceforge.net/p/yapeal/code/ci/master/tree/lib/Yapeal/docs/UsingStandards.md
+[3]: https://sourceforge.net/p/yapeal/code/ci/master/tree/lib/Yapeal/docs/WhyMonolog.md
+[4]: https://sourceforge.net/p/yapeal/code/ci/master/tree/lib/Yapeal/docs/WhyYaml.md

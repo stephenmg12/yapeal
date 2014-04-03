@@ -16,7 +16,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         $yapealTemplate = file_get_contents(
             dirname(dirname(dirname(__DIR__)))
-            . '/Configuration/yapeal-defaults.yaml'
+            . '/config/yapeal-example.yaml'
         );
         $structure = array(
             'lib' => array(
@@ -24,10 +24,11 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
                     'config' => array(
                         'yapeal.ini' => 'bogus',
                         'yapeal.json' => 'bogus',
-                        'yapeal-example.json' => 'bogus'
+                        'yapeal.yaml' => $yapealTemplate,
+                        'yapeal-example.json' => 'bogus',
+                        'yapeal-example.yaml' => $yapealTemplate
                     ),
                     'Configuration' => array(
-                        'yapeal-defaults.yaml' => $yapealTemplate,
                         'yapeal-schema.json' => 'bogus'
                     )
                 )
@@ -58,7 +59,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     }
     public function testAddConfigFilesWhenFilesParamIsArray()
     {
-        $expectedResult = $this->configPath . '/yapeal-defaults.yaml';
+        $expectedResult = $this->vfs->url() . '/lib/Yapeal/config/yapeal.yaml';
         $config = new Configuration(null, null, $this->configPath);
         $this->assertAttributeContains($expectedResult, 'configFiles', $config);
         $input = '{libraryBase}/config/yapeal-example.json';

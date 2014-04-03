@@ -19,4 +19,4 @@ Thanks for using Yapeal, Dragonaire
 [3]: https://sourceforge.net/p/yapeal/code/ci/master/tree/CHANGELOG.md "CHANGELOG.md"
 [4]: https://sourceforge.net/p/yapeal/code/ci/master/tree/LICENSE.md "LICENSE.md"
 [5]: https://sourceforge.net/p/yapeal/code/ci/master/tree/GNU-GPL.md "GNU-GPL.md"
-[6]: https://sourceforge.net/p/yapeal/code/ci/master/tree/src/Yapeal/docs/Index.md
+[6]: https://sourceforge.net/p/yapeal/code/ci/master/tree/lib/Yapeal/docs/Index.md

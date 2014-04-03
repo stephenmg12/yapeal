@@ -1,22 +1,10 @@
 ---
 yapeal:
     #####
-    # REQUIRED Sections: Cache, Database, Logging.
+    # REQUIRED Sections: cache, catabase, logging.
     #####
 
     # NOTE: In the follow examples the built-in defaults are shown.
-
-    # Application agent string used as part of the HTTP User Agent header.
-    #
-    # Though optional use of this setting is highly recommended and should
-    # follow RFC 1945 or the extended format used by Mozilla which is documented
-    # at https://developer.mozilla.org/en/User_Agent_Strings_Reference
-    #
-    # Note that an agent string for Yapeal and libcurl will be appended
-    # automatically for all API requests.
-    # i.e. " Yapeal/{version} {stability} ({OS} {arch}) libcurl/{curl_version}"
-    #
-    # application_agent: "{application_agent} Yapeal/{version} {stability} ({OS} {arch}) libcurl/{curl_version}"
 
     # Sets mode for RegisteredCharacter/Corporation entries.
     #
@@ -43,7 +31,7 @@ yapeal:
 
     # Section for cache settings. (required)
     # WARNING: Yapeal will not work with this section missing.
-    Cache:
+    cache:
 
         # Directory where EVE API XML files will be cached.
         #
@@ -60,7 +48,7 @@ yapeal:
 
     # Section for database settings. (required)
     # WARNING: Yapeal will not work with this section missing.
-    Database:
+    database:
 
         # Database name.
         #
@@ -85,7 +73,7 @@ yapeal:
 
     # Logging settings (required)
     # WARNING: Yapeal will not work with this section missing.
-    Logging:
+    monolog:
 
         # Directory where logs are put.
         #
@@ -95,7 +83,7 @@ yapeal:
         #
         # locale: "en_US"
 
-        # Used to set minimum logging level. (unused, reserved)
+        # Used to set minimum logging level.
         # Allowed values:
         # "emergency", "alert", "critical", "error", "warning", "notice",
         # "info", "debug"
@@ -103,3 +91,25 @@ yapeal:
         # In production - level: "notice" || level: "warning"
         #
         # level: "warning"
+
+        # List of one or more log handlers.
+        handlers:
+
+    # Network settings (required)
+    # WARNING: Yapeal will not work with this section missing.
+    network:
+
+    # Application agent string used as part of the HTTP User Agent header.
+    #
+    # Though optional use of this setting is highly recommended and should
+    # follow RFC 1945 or the extended format used by Mozilla which is documented
+    # at https://developer.mozilla.org/en/User_Agent_Strings_Reference
+    #
+    # Note that an agent string for Yapeal and libcurl will be appended
+    # automatically for all API requests.
+    # format example:
+    # "{application_agent} Yapeal/{version} {stability} ({OS} {arch}) libcurl/{curl_version}"
+    #
+    # application_agent: "unknownApp"
+
+    # TODO: Need to add other possible settings here like proxy stuff etc.

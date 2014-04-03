@@ -12,11 +12,18 @@ use Doctrine\DBAL\Tools\Console\Helper;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\Version;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper as SHelper;
 
-require_once "../../vendor/autoload.php";
+(@include_once dirname(__DIR__) . '/autoload.php')
+|| (@include_once __DIR__ . '/vendor/autoload.php')
+|| (@include_once dirname(__DIR__) . '/vendor/autoload.php')
+|| (@include_once dirname(dirname(__DIR__)) . '/vendor/autoload.php')
+|| (@include_once dirname(dirname(dirname(__DIR__))) . '/autoload.php')
+|| die('Could not find required auto class loader. Aborting ...');
 // Create a simple "default" Doctrine ORM configuration for Annotations
 $isDevMode = true;
 $entities = array(__DIR__ . '/Entity/');
@@ -50,7 +57,7 @@ $helperSet = new SHelper\HelperSet(
     array(
         'db' => new Helper\ConnectionHelper($con),
         'dialog' => new SHelper\DialogHelper(),
-        'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper(
+        'em' => new EntityManagerHelper(
             $entityManager
         )
     )
@@ -58,7 +65,7 @@ $helperSet = new SHelper\HelperSet(
 $cli =
     new Application(
         'Doctrine Command Line Interface',
-        \Doctrine\ORM\Version::VERSION
+        Version::VERSION
     );
 $cli->setCatchExceptions(true);
 $cli->setHelperSet($helperSet);
