@@ -55,6 +55,7 @@ use Yapeal\Network as NET;
  */
 class Yapeal
 {
+    use DependencyContainerTrait;
     /**
      * @param Pimple $container A small Dependency Injection Container.
      *
@@ -108,16 +109,6 @@ class Yapeal
         return $this;
     }
     /**
-     * @return Pimple
-     */
-    public function getDependencyContainer()
-    {
-        if (is_null($this->dependencyContainer)) {
-            $this->setDependencyContainer();
-        }
-        return $this->dependencyContainer;
-    }
-    /**
      * @return $this
      * @throws \LogicException
      */
@@ -128,21 +119,7 @@ class Yapeal
         print 'Works!' . PHP_EOL;
         return $this;
     }
-    /**
-     * @param Pimple|null $value
-     *
-     * @return self
-     */
-    public function setDependencyContainer($value = null)
-    {
-        $this->dependencyContainer = $value ? : new Pimple();
-        return $this;
-    }
     private static $version;
-    /**
-     * @var Pimple $container A small Dependency Injection Container
-     */
-    private $dependencyContainer;
     /**
      * @var int Holds the soft limit used to keep Yapeal from overloading servers.
      */
