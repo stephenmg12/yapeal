@@ -33,6 +33,12 @@ the others. Another is I do NOT see where any of the differences between PSR-0
 and PSR-4 have any real advantages in Yapeal. In the future if there seems to be
 an advantage I will look at making the change but for now PSR-0 is good enough.
 
+**Update**
+
+Having looked at [PSR-4][4] some more and been doing some testing have decided
+it would simplify and improve the directory structure within the project by
+flattening it out.
+
 ### Other 'Standards' ###
 
 Not really a standard in the normal sense but [Composer][6] / [Packagist][7].
