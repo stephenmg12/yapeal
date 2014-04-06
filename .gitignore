@@ -1,0 +1,15 @@
+.hgsub
+.idea/
+*.komodoproject
+cache/
+composer.phar
+config/yapeal.*
+docs/PhpDoc/
+docs/PhpUnit/
+export/
+junk.php
+phpdoc.xml
+phpunit.xml
+test.php
+upload/
+vendor/
