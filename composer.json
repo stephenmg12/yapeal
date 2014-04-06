@@ -44,7 +44,6 @@
         "symfony/config": "2.5.*@dev"
     },
     "require-dev": {
-        "geraintluff/jsv4": "dev-master",
         "mikey179/vfsStream": "v1.2.0",
         "phpmd/phpmd": "1.5.0",
         "phpunit/phpunit": "3.7.*@dev",

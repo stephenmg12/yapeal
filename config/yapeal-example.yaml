@@ -75,11 +75,11 @@ yapeal:
     # WARNING: Yapeal will not work with this section missing.
     monolog:
 
-        # Directory where log are put.
+        # Directory where logs are put.
         #
-        # dir: "{libraryBase}/log"
+        # dir: "{libraryBase}/logs"
 
-        # Locale to use for log messages. (unused, reserved)
+        # Locale to use for logs messages. (unused, reserved)
         #
         # locale: "en_US"
 
@@ -92,7 +92,7 @@ yapeal:
         #
         # level: "warning"
 
-        # List of one or more log handlers.
+        # List of one or more logs handlers.
         handlers:
 
     # Network settings (required)
