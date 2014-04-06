@@ -3,8 +3,8 @@
 namespace Yapeal\Entity\Char;
 
 use Doctrine\ORM\Mapping as ORM;
-use Yapeal\Entity\Types;
 use Yapeal\Entity;
+use Yapeal\Entity\Types;
 
 /**
  * CharacterSheet

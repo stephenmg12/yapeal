@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdoc>
     <files>
-        <directory>lib/Yapeal</directory>
-        <ignore>lib/Yapeal/docs/*</ignore>
+        <directory>lib</directory>
+        <ignore>config/*</ignore>
+        <ignore>docs/*</ignore>
         <ignore>junk.php</ignore>
         <ignore>test.php</ignore>
-        <ignore>Yapeal/Tests/*</ignore>
-        <ignore>Yapeal/vendor/*</ignore>
-        <ignore>yapeal-cli.php</ignore>
-        <ignore>Yapeal/bootstrap.php</ignore>
-        <ignore>Yapeal/cli-config.php</ignore>
+        <ignore>tests/*</ignore>
+        <ignore>vendor/*</ignore>
+        <ignore>bin/yapeal-cli.php</ignore>
+        <ignore>bin/bootstrap.php</ignore>
+        <ignore>bin/cli-config.php</ignore>
     </files>
     <parser default-package-name="Yapeal 2">
-        <target>lib/Yapeal/docs/cache</target>
+        <target>docs/PhpDoc/cache</target>
     </parser>
     <title>Yapeal 2</title>
     <transformations>
         <template name="new-black"/>
     </transformations>
     <transformer>
-        <target>lib/Yapeal/docs/html</target>
+        <target>docs/PhpDoc/html</target>
     </transformer>
 </phpdoc>

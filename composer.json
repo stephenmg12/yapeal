@@ -1,7 +1,7 @@
 {
     "name": "yapeal/yapeal",
-    "description": "Yet Another Php Eve Api Library",
-    "keywords": ["curl", "database", "Eve-Online", "rest", "PDO"],
+    "description": "Yet Another Php Eve Api Library also know as Yapeal which can be used to access the Eve Online API data and place it into a database.",
+    "keywords": ["curl", "database", "Eve", "Eve-Online", "PDO", "REST", "RESTful"],
     "license": "LGPL-3.0+",
     "authors": [
         {
@@ -35,30 +35,35 @@
         "ext-Reflection": "*",
         "ext-SPL": "*",
         "ext-xmlreader": "*",
-        "geraintluff/jsv4": "dev-master",
         "guzzle/guzzle": "3.7.*@dev",
         "lib-curl": ">=7.19.7",
         "lib-openssl": ">=0.9.8",
-        "mikey179/vfsStream": "v1.2.0",
         "monolog/monolog": "1.6.*@dev",
         "php": ">=5.3.6",
-        "phpunit/phpunit": "3.7.*@dev",
-        "phpunit/dbunit": ">=1.2",
         "pimple/pimple": "2.0.*@dev",
-        "symfony/config": "2.5.*@dev",
-        "twig/twig": "v1.13.2"
+        "symfony/config": "2.5.*@dev"
     },
     "require-dev": {
+        "geraintluff/jsv4": "dev-master",
+        "mikey179/vfsStream": "v1.2.0",
         "phpmd/phpmd": "1.5.0",
+        "phpunit/phpunit": "3.7.*@dev",
+        "phpunit/dbunit": ">=1.2",
         "sebastian/phpcpd": "1.4.x-dev",
-        "squizlabs/php_codesniffer": "1.4.*"
+        "squizlabs/php_codesniffer": "1.4.*",
+        "twig/twig": "v1.13.2"
     },
     "autoload": {
-        "psr-0": {
-            "Yapeal\\": "lib/"
+        "psr-4": {
+            "Yapeal\\": ["lib/", "bin/"]
         }
     },
-    "bin": ["lib/yapeal-cli.php"],
+    "autoload-dev": {
+        "psr-4": {
+            "Yapeal\\Tests\\": ["tests/"]
+        }
+    },
+    "bin": ["bin/yapeal-cli.php"],
     "minimum-stability": "dev",
     "prefer-stable": true
 }

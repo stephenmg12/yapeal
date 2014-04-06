@@ -17,7 +17,7 @@
         "Logging": {
             "locale": "en_US",
             "level": 123,
-            "dir": "{libraryBase}/logs"
+            "dir": "{libraryBase}/log"
         }
     }
 }

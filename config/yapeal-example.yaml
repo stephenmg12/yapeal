@@ -75,9 +75,9 @@ yapeal:
     # WARNING: Yapeal will not work with this section missing.
     monolog:
 
-        # Directory where logs are put.
+        # Directory where log are put.
         #
-        # dir: "{libraryBase}/logs"
+        # dir: "{libraryBase}/log"
 
         # Locale to use for log messages. (unused, reserved)
         #

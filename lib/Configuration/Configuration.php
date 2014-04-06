@@ -547,7 +547,7 @@ class Configuration implements ConfigurationInterface, LoggerAwareInterface
             ->isRequired()
             ->children()
             ->scalarNode('dir')
-            ->defaultValue('{libraryBase}/logs')
+            ->defaultValue('{libraryBase}/log')
             ->end()
             ->enumNode('level')
             ->defaultValue('warning')

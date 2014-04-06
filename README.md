@@ -4,7 +4,8 @@ Here's a [new link][6] to some additional docs I've started
 
 ***New README coming here soon!!!***
 
-[Composer][1] is now the recommended way to install Yapeal. See [INSTALL.md][2] for help with installation.
+[Composer][1] is now the recommended way to install Yapeal. See [INSTALL.md][2]
+for help with installation.
 
 For additional information about any changes see the commit messages in the
 repository and the [CHANGELOG.md][3] file.
@@ -19,4 +20,4 @@ Thanks for using Yapeal, Dragonaire
 [3]: https://sourceforge.net/p/yapeal/code/ci/master/tree/CHANGELOG.md "CHANGELOG.md"
 [4]: https://sourceforge.net/p/yapeal/code/ci/master/tree/LICENSE.md "LICENSE.md"
 [5]: https://sourceforge.net/p/yapeal/code/ci/master/tree/GNU-GPL.md "GNU-GPL.md"
-[6]: https://sourceforge.net/p/yapeal/code/ci/master/tree/lib/Yapeal/docs/Index.md
+[6]: https://sourceforge.net/p/yapeal/code/ci/master/tree/docs/Index.md

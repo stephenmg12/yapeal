@@ -8,14 +8,14 @@ use Yapeal\Configuration\Configuration;
 /**
  * Class ConfigurationTest
  *
- * @package Yapeal\Tests\Yapeal\Configuration
+ * @package Yapeal\tests\Yapeal\Configuration
  */
 class ConfigurationTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
         $yapealTemplate = file_get_contents(
-            dirname(dirname(dirname(__DIR__)))
+            dirname(dirname(__DIR__))
             . '/config/yapeal-example.yaml'
         );
         $structure = array(
