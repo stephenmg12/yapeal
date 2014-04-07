@@ -31,13 +31,12 @@ namespace Yapeal\Dependency;
 
 /**
  * Trait DependencyContainerTrait
- *
- * @package Yapeal
+ * @since     2.0.0-alpha4
  */
 trait DependencyContainerTrait
 {
     /**
-     * @return Pimple
+     * @return PimpleInterface
      */
     public function getDependencyContainer()
     {
@@ -47,17 +46,17 @@ trait DependencyContainerTrait
         return $this->dependencyContainer;
     }
     /**
-     * @param Pimple|null $value
+     * @param PimpleInterface|null $value
      *
      * @return self
      */
-    public function setDependencyContainer($value = null)
+    public function setDependencyContainer(PimpleInterface $value = null)
     {
         $this->dependencyContainer = $value ? : new Pimple();
         return $this;
     }
     /**
-     * @var Pimple A small Dependency Injection Container
+     * @var PimpleInterface A small Dependency Injection Container
      */
     protected $dependencyContainer;
 }

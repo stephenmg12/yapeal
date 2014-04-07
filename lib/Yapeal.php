@@ -50,18 +50,18 @@ use Yapeal\Network as YN;
  * available the other packages from the vendor directory. Composer's default
  * one which you can find in vendor/autoload.php works.
  *
- * @package Yapeal
+ * @since 2.0.0-alpha1
  */
 class Yapeal
 {
     use YD\DependencyContainerTrait;
     /**
-     * @param YD\Pimple $container A small Dependency Injection Container.
+     * @param YD\PimpleInterface $container A small Dependency Injection Container.
      *
      * @throws \RuntimeException
      */
     public function __construct(
-        YD\Pimple $container = null
+        YD\PimpleInterface $container = null
     ) {
         if (date_default_timezone_get() !== 'UTC') {
             $mess = "Yapeal requires that PHP's timezone be set to UTC";

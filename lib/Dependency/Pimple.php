@@ -1,12 +1,17 @@
 <?php
 /**
- * This file is part of Pimple.
+ * This file was part of Pimple.
+ *
+ * PHP 5.4
  *
  * I (Michael Cummings) decided to make some mostly cosmetic changes to the code
  * plus ran into some dependence issues in Composer with some other stuff I was
  * using so I decided it was just as easy to make Pimple part of Yapeal.
  *
+ * This file is part of Yet Another Php Eve Api Library also know as Yapeal which can be used to access the Eve Online
+ * API data and place it into a database.
  * Copyright (c) 2009 Fabien Potencier
+ * Copyright (C) 2014 Michael Cummings
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,18 +31,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
+ * @copyright 2009,2014 Fabien Potencier, Michael Cummings
  * @author    Fabien Potencier
  * @author    Michael Cummings <mgcummings@yahoo.com>
+ * @link      http://pimple.sensiolabs.org/ Pimple
  */
 namespace Yapeal\Dependency;
 
 /**
  * Pimple main class.
  *
- * @package pimple
- * @author  Fabien Potencier
+ * @author Fabien Potencier
+ * @author Michael Cummings <mgcummings@yahoo.com>
+ * @since  2.0.0-alpha5
  */
-class Pimple implements \ArrayAccess
+class Pimple implements PimpleInterface
 {
     /**
      * Instantiate the container.
