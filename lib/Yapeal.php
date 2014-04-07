@@ -34,11 +34,10 @@
  */
 namespace Yapeal;
 
-use Doctrine\DBAL;
-use Pimple;
-use Yapeal\Configuration as CFG;
-use Yapeal\Database as DB;
-use Yapeal\Network as NET;
+use Yapeal\Configuration as YC;
+use Yapeal\Database as YDB;
+use Yapeal\Dependency as YD;
+use Yapeal\Network as YN;
 
 /**
  * Class Yapeal is used to get information from Eve Online API and store in to a
@@ -55,17 +54,16 @@ use Yapeal\Network as NET;
  */
 class Yapeal
 {
-    use DependencyContainerTrait;
+    use YD\DependencyContainerTrait;
     /**
-     * @param Pimple $container A small Dependency Injection Container.
+     * @param YD\Pimple $container A small Dependency Injection Container.
      *
      * @throws \RuntimeException
      */
     public function __construct(
-        Pimple $container = null
+        YD\Pimple $container = null
     ) {
-        $tz = date_default_timezone_get();
-        if ($tz !== 'UTC') {
+        if (date_default_timezone_get() !== 'UTC') {
             $mess = "Yapeal requires that PHP's timezone be set to UTC";
             throw new \RuntimeException($mess);
         }
@@ -89,7 +87,7 @@ class Yapeal
         return static::$version;
     }
     /**
-     * @return $this
+     * @return self
      */
     public function configure()
     {
@@ -109,7 +107,7 @@ class Yapeal
         return $this;
     }
     /**
-     * @return $this
+     * @return self
      * @throws \LogicException
      */
     public function run()
@@ -119,6 +117,9 @@ class Yapeal
         print 'Works!' . PHP_EOL;
         return $this;
     }
+    /**
+     * @var string
+     */
     private static $version;
     /**
      * @var int Holds the soft limit used to keep Yapeal from overloading servers.

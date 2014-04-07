@@ -27,9 +27,7 @@
  * @license   http://www.gnu.org/copyleft/lesser.html GNU LGPL
  * @author    Michael Cummings <mgcummings@yahoo.com>
  */
-namespace Yapeal;
-
-use Pimple;
+namespace Yapeal\Dependency;
 
 /**
  * Trait DependencyContainerTrait
