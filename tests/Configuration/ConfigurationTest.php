@@ -1,5 +1,5 @@
 <?php
-namespace Yapeal\Tests\Yapeal\Configuration;
+namespace Yapeal\Tests\Configuration;
 
 use org\bovigo\vfs as VFS;
 use PHPUnit_Framework_TestCase;
@@ -7,8 +7,6 @@ use Yapeal\Configuration\Configuration;
 
 /**
  * Class ConfigurationTest
- *
- * @package Yapeal\tests\Yapeal\Configuration
  */
 class ConfigurationTest extends PHPUnit_Framework_TestCase
 {
