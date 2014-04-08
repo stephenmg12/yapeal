@@ -32,7 +32,7 @@
  * THE SOFTWARE.
  *
  * @copyright 2009,2014 Fabien Potencier, Michael Cummings
- * @author    Fabien Potencier
+ * @author    Fabien Potencier <fabien@symfony.com>
  * @author    Michael Cummings <mgcummings@yahoo.com>
  * @link      http://pimple.sensiolabs.org/ Pimple
  */
