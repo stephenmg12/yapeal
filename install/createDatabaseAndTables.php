@@ -1,7 +1,7 @@
 #!/usr/bin/php -Cq
 <?php
 /**
- * Contains code used to add or update tables in database.
+ * Contains code used to create database and add tables.
  *
  * PHP version 5
  *
@@ -25,8 +25,6 @@
  * @author     Michael Cummings <mgcummings@yahoo.com>
  * @copyright  Copyright (c) 2008-2014, Michael Cummings
  * @license    http://www.gnu.org/copyleft/lesser.html GNU LGPL
- * @package    Yapeal
- * @subpackage Install
  * @link       http://code.google.com/p/yapeal/
  * @link       http://www.eveonline.com/
  */
