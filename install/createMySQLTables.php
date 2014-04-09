@@ -36,7 +36,7 @@
 if (isset($_REQUEST['viewSource'])) {
     highlight_file(__FILE__);
     exit();
-};
+}
 /**
  * @internal Only let this code be ran in CLI.
  */
@@ -45,7 +45,7 @@ if (PHP_SAPI != 'cli') {
     $mess = basename(__FILE__) . ' only works with CLI version of PHP but tried'
         . ' to run it using ' . PHP_SAPI . ' instead.' . PHP_EOL;
     die($mess);
-};
+}
 /**
  * @internal Only let this code be ran directly.
  */
@@ -55,7 +55,7 @@ if (count($included) > 1 || $included[0] != __FILE__) {
         . ' must be called directly and can not be included.' . PHP_EOL;
     fwrite(STDERR, $mess);
     exit(1);
-};
+}
 /**
  * Define short name for directory separator which always uses unix '/'.
  *
@@ -67,7 +67,7 @@ $dir = @getenv('YAPEAL_BASE');
 if ($dir === false) {
     // Used to overcome path issues caused by how script is ran.
     $dir = str_replace('\\', DS, realpath(dirname(__FILE__) . DS . '..')) . DS;
-};
+}
 // Get path constants so they can be used.
 require_once $dir . 'inc' . DS . 'common_paths.php';
 require_once YAPEAL_BASE . 'revision.php';
@@ -93,24 +93,24 @@ $options = parseCommandLineOptions($shortOpts, $longOpts);
 if (isset($options['help'])) {
     usage(__FILE__, $shortOpts, $longOpts);
     exit(0);
-};
+}
 if (isset($options['version'])) {
     showVersion(__FILE__);
     exit(0);
-};
+}
 if (!empty($options['config'])) {
     $section = getSettingsFromIniFile($options['config'], 'Database');
     unset($options['config']);
 } else {
     $section = getSettingsFromIniFile(null, 'Database');
-};
+}
 if (isset($options['xml'])) {
     $sections = explode(' ', $options['xml']);
     unset($options['xml']);
 } else {
     $sections =
         array('util', 'account', 'char', 'corp', 'eve', 'map', 'server');
-};
+}
 // Merge the configuration file settings with ones from command line.
 // Settings from command line will override any from file.
 $options = array_merge($section, $options);
@@ -119,88 +119,60 @@ $mess = '';
 foreach ($required as $setting) {
     if (empty($options[$setting])) {
         $mess .= 'Missing required setting ' . $setting . PHP_EOL;
-    };
-}; // foreach $required ...
+    }
+}
 if (!empty($mess)) {
     fwrite(STDERR, $mess);
     exit(2);
-};
-$dsn = 'mysql://' . $options['username'] . ':' . $options['password'] . '@';
-$dsn .= $options['host'] . '/' . $options['database'];
-if (isset($options['suffix'])) {
-    $dsn .= $options['suffix'];
-} else {
-    $dsn .= '?new';
-};
-$ret = 0;
-try {
-    // Get connection to DB.
-    $db = ADONewConnection($dsn);
-    foreach ($sections as $section) {
-        $file = $dir . DS . 'install' . DS . $section . '.xml';
-        if (!is_file($file)) {
-            $mess = 'Could not find XML file ' . $file . PHP_EOL;
-            fwrite(STDERR, $mess);
-            continue;
-        };
-        $xml = file_get_contents($file);
-        if (false === $xml) {
-            $mess = 'Could not get contents of XML file ' . $file;
-            fwrite(STDERR, $mess);
-            continue;
-        };
-        // Get new Schema.
-        $schema = new adoSchema($db);
-        // Some settings for Schema.
-        $schema->ExecuteInline(false);
-        $schema->ContinueOnError(false);
-        $schema->SetUpgradeMethod('ALTER');
-        if (isset($options['table_prefix'])) {
-            $schema->SetPrefix($options['table_prefix'], false);
-        };
-        $sql = $schema->ParseSchemaString($xml);
-        $result = $schema->ExecuteSchema($sql);
-        $save =
-            $schema->SaveSQL(YAPEAL_CACHE . 'ADOdb' . DS . $section . '.sql');
-        if (false === $save) {
-            $mess = 'Could not save ' . YAPEAL_CACHE . 'ADOdb' . DS . $section
-                . '.sql' . PHP_EOL;
-            fwrite(STDERR, $mess);
-        };
-        if ($result == 2) {
-            ++$ret;
-        } else {
-            if ($result == 1) {
-                $mess = 'Error executing schema for ' . $section . PHP_EOL;
-                fwrite(STDERR, $mess);
-            } else {
-                $mess = 'Failed to execute schema for ' . $section . PHP_EOL;
-                fwrite(STDERR, $mess);
-            }
-        };
-        $schema = null;
-    }; // foreach $sections as $section ...
-    if (count($sections) != $ret) {
-        $mess .= 'There were problems during processing please check any error';
-        $mess .= ' messages from above and correct.' . PHP_EOL;
-        fwrite(STDERR, $mess);
-        exit(2);
-    };
-} catch (Exception $e) {
-    $mess = 'EXCEPTION: ' . $e->getMessage() . PHP_EOL;
-    if ($e->getCode()) {
-        $mess .= '     Code: ' . $e->getCode() . PHP_EOL;
-    };
-    $mess .= '     File: ' . $e->getFile() . '(' . $e->getLine() . ')'
-        . PHP_EOL;
-    $mess .= '    Trace:' . PHP_EOL;
-    $mess .= $e->getTraceAsString() . PHP_EOL;
-    $mess .= str_pad(' END TRACE ', 30, '-', STR_PAD_BOTH) . PHP_EOL;
+}
+$file = $dir . DS . 'install' . DS . 'sql' . DS . 'DatabaseCreate.sql';
+if (!is_file($file)) {
+    $mess = 'Could not find SQL file ' . $file . PHP_EOL;
     fwrite(STDERR, $mess);
     exit(2);
 }
+$sqlStatements = file_get_contents($file);
+if (false === $sqlStatements) {
+    $mess = 'Could not get contents of SQL file ' . $file;
+    fwrite(STDERR, $mess);
+    exit(2);
+}
+// Replace {database} with database option.
+$sqlStatements =
+    str_replace('{database}', $options['database'], $sqlStatements);
+// Replace {table_prefix} with table_prefix option.
+$sqlStatements =
+    str_replace('{table_prefix}', $options['table_prefix'], $sqlStatements);
+// Trim off blank last line.
+$sqlStatements = rtrim($sqlStatements);
+// Split up SQL into statements.
+$sqlStatements = explode(';', $sqlStatements);
+$mysqli = new mysqli(
+    $options['host'], $options['username'], $options['password'], ''
+);
+if (mysqli_connect_error()) {
+    $mess = 'Could NOT connect to MySQL. MySQL error was ('
+        . mysqli_connect_errno() . ') ' . mysqli_connect_error();
+    fwrite(STDERR, $mess);
+    exit(2);
+}
+foreach ($sqlStatements as $line => $sql) {
+    $sql = rtrim($sql, ';');
+    if (strlen($sql) < 3) {
+        continue;
+    }
+    if ($mysqli->query($sql) === false) {
+        $mess = 'The following SQL statement failed on statement: ' . $line
+            . PHP_EOL
+            . $sql . PHP_EOL
+            . '(' . $mysqli->errno . ') ' . $mysqli->error . PHP_EOL;
+        fwrite(STDERR, $mess);
+        $mysqli->close();
+        exit(2);
+    }
+}
+$mysqli->close();
 $mess =
     'All database tables have been installed or updated as needed.' . PHP_EOL;
 fwrite(STDOUT, $mess);
 exit(0);
-
