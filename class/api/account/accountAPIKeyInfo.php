@@ -28,7 +28,7 @@
  * @link       http://code.google.com/p/yapeal/
  * @link       http://www.eveonline.com/
  */
-use Yapeal\Database\AAccount;
+use Yapeal\Database\AbstractAccount;
 use Yapeal\Database\DBConnection;
 use Yapeal\Database\QueryBuilder;
 
@@ -59,7 +59,7 @@ if (count(get_included_files()) < 2) {
  * @package    Yapeal
  * @subpackage Api_account
  */
-class accountAPIKeyInfo extends AAccount
+class accountAPIKeyInfo extends AbstractAccount
 {
     /**
      * Constructor
