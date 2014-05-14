@@ -1,6 +1,6 @@
-<phpunit bootstrap="tests/bootstrap.php">
+<phpunit>
     <testsuite name="Model Test Suite">
-        <directory>./tests/application</directory>
+        <directory>./tests</directory>
     </testsuite>
     
     <logging>
@@ -14,6 +14,9 @@
     <filter>
 	  <blacklist>
 	    <directory>vendor</directory>
+		<directory>log</directory>
+		<directory>cache</directory>
+		<directory>ext</directory>
 	  </blacklist>
 	</filter>
     
