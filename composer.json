@@ -42,7 +42,7 @@
         "lib-curl": ">=7.15.0",
         "lib-openssl": ">=0.9.8",
         "php": ">=5.3.2",
-        "guzzle/guzzle": "~3.8",
+        "guzzle/guzzle": "~3.9",
         "monolog/monolog": "1.9.0"
     },
     "require-dev": {

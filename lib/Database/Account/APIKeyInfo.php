@@ -24,42 +24,18 @@
  * @author     Michael Cummings <mgcummings@yahoo.com>
  * @copyright  Copyright (c) 2008-2014, Michael Cummings
  * @license    http://www.gnu.org/copyleft/lesser.html GNU LGPL
- * @package    Yapeal
  * @link       http://code.google.com/p/yapeal/
  * @link       http://www.eveonline.com/
  */
 namespace Yapeal\Database\Account;
 
+use Psr\Log\LoggerInterface;
 use Yapeal\Database\AbstractAccount;
 use Yapeal\Database\DBConnection;
 use Yapeal\Database\QueryBuilder;
 
 /**
- * @internal Allow viewing of the source code in web browser.
- */
-if (isset($_REQUEST['viewSource'])) {
-    highlight_file(__FILE__);
-    exit();
-}
-/**
- * @internal Only let this code be included.
- */
-if (count(get_included_files()) < 2) {
-    $mess = basename(__FILE__)
-        . ' must be included it can not be ran directly.' . PHP_EOL;
-    if (PHP_SAPI != 'cli') {
-        header('HTTP/1.0 403 Forbidden', true, 403);
-        die($mess);
-    } else {
-        fwrite(STDERR, $mess);
-        exit(1);
-    }
-}
-/**
  * Class used to fetch and store account APIKeyInfo API.
- *
- * @package    Yapeal
- * @subpackage Api_account
  */
 class APIKeyInfo extends AbstractAccount
 {
@@ -75,7 +51,7 @@ class APIKeyInfo extends AbstractAccount
     public function __construct(array $params)
     {
         $this->section = strtolower(basename(__DIR__));
-        $this->api = basename(str_replace('\\', '/', __CLASS__));
+        $this->api = basename(__CLASS__);
         parent::__construct($params);
     }
     /**
@@ -104,7 +80,7 @@ class APIKeyInfo extends AbstractAccount
                             while ($this->xr->moveToNextAttribute()) {
                                 if ($this->xr->name == 'characterID') {
                                     $bridge['characterID'] = $this->xr->value;
-                                }
+                                };
                                 $row[$this->xr->name] = $this->xr->value;
                             }
                             $this->bridge->addRow($bridge);
@@ -123,6 +99,15 @@ class APIKeyInfo extends AbstractAccount
             'Function ' . __FUNCTION__ . ' did not exit correctly' . PHP_EOL;
         \Logger::getLogger('yapeal')
                ->warn($mess);
+        return false;
+    }
+    /**
+     * Method used to determine if Need to use upsert or insert for API.
+     *
+     * @return bool
+     */
+    protected function needsUpsert()
+    {
         return false;
     }
     /**
@@ -161,7 +146,7 @@ class APIKeyInfo extends AbstractAccount
                                         && $this->xr->value == ''
                                     ) {
                                         continue;
-                                    }
+                                    };
                                     $row[$this->xr->name] = $this->xr->value;
                                 }
                                 $qb->addRow($row);
@@ -179,7 +164,7 @@ class APIKeyInfo extends AbstractAccount
                                     \Logger::getLogger('yapeal')
                                            ->warn($mess);
                                     return false;
-                                }
+                                };
                                 if ($subTable == 'characters') {
                                     $this->characters();
                                 }
@@ -225,7 +210,6 @@ class APIKeyInfo extends AbstractAccount
      * If there is any need to delete records or empty tables before parsing XML
      * and adding the new data this method should be used to do so.
      *
-     * @throws InvalidArgumentException
      * @return bool Will return TRUE if table(s) were prepared correctly.
      */
     protected function prepareTables()
@@ -233,13 +217,13 @@ class APIKeyInfo extends AbstractAccount
         try {
             $con = DBConnection::connect(YAPEAL_DSN);
             // Empty out old data then upsert (insert) new.
-            $sql = 'delete from `'
-                . YAPEAL_TABLE_PREFIX . $this->section . $this->api . '`'
-                . ' where `keyID`=' . $this->params['keyID'];
+            $sql = 'DELETE FROM `';
+            $sql .= YAPEAL_TABLE_PREFIX . $this->section . $this->api . '`';
+            $sql .= ' where `keyID`=' . $this->params['keyID'];
             $con->Execute($sql);
-            $sql = 'delete from `'
-                . YAPEAL_TABLE_PREFIX . 'accountKeyBridge`'
-                . ' where `keyID`=' . $this->params['keyID'];
+            $sql = 'DELETE FROM `';
+            $sql .= YAPEAL_TABLE_PREFIX . 'accountKeyBridge`';
+            $sql .= ' where `keyID`=' . $this->params['keyID'];
             $con->Execute($sql);
         } catch (\ADODB_Exception $e) {
             \Logger::getLogger('yapeal')
@@ -249,3 +233,4 @@ class APIKeyInfo extends AbstractAccount
         return true;
     }
 }
+

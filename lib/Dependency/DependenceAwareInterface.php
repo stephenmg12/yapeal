@@ -1,11 +1,11 @@
 <?php
 /**
- * Contains EveApiXmlDataInterface Interface.
+ * Contains DependenceAwareInterface Interface.
  *
  * PHP version 5.3
  *
  * LICENSE:
- * This file is part of 1.1.x
+ * This file is part of 1.1.x-WIP
  * Copyright (C) 2014 Michael Cummings
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General
@@ -26,41 +26,17 @@
  * @license   http://www.gnu.org/copyleft/lesser.html GNU LGPL
  * @author    Michael Cummings <mgcummings@yahoo.com>
  */
-namespace Yapeal\Xml;
+namespace Yapeal\Dependency;
 
 /**
- * Interface EveApiXmlDataInterface
+ * Interface DependenceAwareInterface
  */
-interface EveApiXmlDataInterface extends EveApiAwareInterface
+interface DependenceAwareInterface
 {
     /**
-     * @return string
-     */
-    public function __toString();
-    /**
-     * @return string[]
-     */
-    public function getEveApiArguments();
-    /**
-     * @return string
-     */
-    public function getEveApiName();
-    /**
-     * @return string
-     */
-    public function getEveApiSectionName();
-    /**
-     * @return string
-     */
-    public function getEveApiXml();
-    /**
-     * @return bool
-     */
-    public function hasXmlRowSet();
-    /**
-     * @param string $xml
+     * @param DependenceInterface|null $depend
      *
      * @return self
      */
-    public function setEveApiXml($xml);
+    public function setDependenceContainer(DependenceInterface $depend = null);
 }
