@@ -30,6 +30,8 @@ namespace Yapeal\Network;
 
 use Guzzle\Http\Client;
 use Guzzle\Http\ClientInterface;
+use Guzzle\Http\Message\Response;
+use Guzzle\Http\Message;
 use Yapeal\Xml\EveApiRetrieverInterface;
 use Yapeal\Xml\EveApiXmlDataInterface;
 
@@ -57,6 +59,10 @@ class EveApiXmlNetworkRetriever implements EveApiRetrieverInterface
      */
     private $client;
     /**
+     * @var Response $response
+     */
+    private $response;
+    /**
      *
      */
     public function _construct()
@@ -81,28 +87,41 @@ class EveApiXmlNetworkRetriever implements EveApiRetrieverInterface
             $this->httpClient();
         }
         $this->connect();
-        // TODO: Implement retrieveEveApi() method.
+        if ($this->response->getStatusCode() == '200') {
+            $this->EveApiXmlData->setEveApiXml($this->response->getBody(true));
+        }
     }
     /**
      * @param $plugin
      */
     public function httpClient($plugin = null)
     {
-        $this->client = new Client(array('base_url' => $this->baseUrl));
+        $this->client = new Client();
         if (isset($plugin)) {
             $this->client->addSubscriber($plugin);
         }
         $this->client->setUserAgent($this->userAgent);
     }
     /**
-     * @return mixed
+     * @return response
      */
     private function connect()
     {
         $EveApiSectionName = $this->EveApiXmlData->getEveApiSectionName();
         $EveApiName = $this->EveApiXmlData->getEveApiName();
         $apiArguments = $this->EveApiXmlData->getEveApiArguments();
-        $request = $this->client->post('/' . $EveApiSectionName . '/' . $EveApiName. '.xml','', $apiArguments);
-        return $response = $request->send();
+        $request = $this->client->post(
+                                array(
+                                    'https://{baseUrl}/{EveApiSectionName}/{EveApiName}.xml.aspx',
+                                    array(
+                                        'baseUrl' => $this->baseUrl,
+                                        'EveApiSectionName' => $EveApiSectionName,
+                                        'EveApiName' => $EveApiName
+                                    )
+                                ),
+                                    '',
+                                    $apiArguments
+        );
+        return $this->response = $request->send();
     }
 }
