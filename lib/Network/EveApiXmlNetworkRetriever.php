@@ -28,16 +28,15 @@
  */
 namespace Yapeal\Network;
 
-use string;
-use Yapeal\Xml\EveApiAwareInterface;
+use Guzzle\Http\Client;
+use Guzzle\Http\ClientInterface;
 use Yapeal\Xml\EveApiRetrieverInterface;
-use Guzzle\Http\Client;e
-use Guzzle\Http\Exception\RequestException;
 use Yapeal\Xml\EveApiXmlDataInterface;
-use \Yapeal\Xml\EveApiXmlData;
 
 /**
  * Class EveApiXmlNetworkRetriever
+ *
+ * @author Stephen Gulick <stephenmg12@gmail.com>
  */
 class EveApiXmlNetworkRetriever implements EveApiRetrieverInterface
 {
@@ -50,7 +49,7 @@ class EveApiXmlNetworkRetriever implements EveApiRetrieverInterface
      */
     protected $userAgent = 'Yapeal/1.2 (+https://github.com/Dragonrun1/yapeal/wiki)';
     /**
-     * @var
+     * @var EveApiXmlDataInterface
      */
     protected $EveApiXmlData;
     /**
@@ -60,14 +59,14 @@ class EveApiXmlNetworkRetriever implements EveApiRetrieverInterface
     /**
      *
      */
-    public function _construct( )
+    public function _construct()
     {
-
     }
     /**
      * @param string $userAgent
      */
-    public function setUserAgent(string $userAgent) {
+    public function setUserAgent($userAgent)
+    {
         $this->userAgent = $userAgent;
     }
     /**
@@ -78,13 +77,21 @@ class EveApiXmlNetworkRetriever implements EveApiRetrieverInterface
     public function retrieveEveApi(EveApiXmlDataInterface $data)
     {
         $this->EveApiXmlData = $data;
+        if (empty($this->client)) {
+            $this->httpClient();
+        }
+        $this->connect();
         // TODO: Implement retrieveEveApi() method.
     }
-    public function httpClient($plugin)
+    /**
+     * @param $plugin
+     */
+    public function httpClient($plugin = null)
     {
-        $this->client = new Client(['base_url' => $baseUrl]);
-        if(isset($plugin))
+        $this->client = new Client(array('base_url' => $this->baseUrl));
+        if (isset($plugin)) {
             $this->client->addSubscriber($plugin);
+        }
         $this->client->setUserAgent($this->userAgent);
     }
     /**
@@ -94,9 +101,8 @@ class EveApiXmlNetworkRetriever implements EveApiRetrieverInterface
     {
         $EveApiSectionName = $this->EveApiXmlData->getEveApiSectionName();
         $EveApiName = $this->EveApiXmlData->getEveApiName();
-        $apiArguments = $this->EveApiXmlData->getApiArguments();
-
-        $request = $this->client->post('/'.$EveApiSectionName.'/'.$EveApiName.'.xml', '', $apiArguments);
+        $apiArguments = $this->EveApiXmlData->getEveApiArguments();
+        $request = $this->client->post('/' . $EveApiSectionName . '/' . $EveApiName. '.xml','', $apiArguments);
         return $response = $request->send();
     }
 }
