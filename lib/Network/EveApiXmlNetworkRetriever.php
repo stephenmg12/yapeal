@@ -30,8 +30,9 @@ namespace Yapeal\Network;
 
 use Guzzle\Http\Client;
 use Guzzle\Http\ClientInterface;
-use Guzzle\Http\Message\Response;
+use Guzzle\Http\Message\Request;
 use Guzzle\Http\Message;
+use Guzzle\Http\Message\Response;
 use Yapeal\Xml\EveApiRetrieverInterface;
 use Yapeal\Xml\EveApiXmlDataInterface;
 
@@ -55,18 +56,41 @@ class EveApiXmlNetworkRetriever implements EveApiRetrieverInterface
      */
     protected $EveApiXmlData;
     /**
+     * @var
+     */
+    protected $urlTemplate;
+    /**
      * @var ClientInterface
      */
     private $client;
     /**
-     * @var Response $response
+     * @var array
      */
-    private $response;
+    private $headers = array(
+        'Accept' => 'text/xml,application/xml,application/xhtml+xml;q=0.9,text/html;q=0.8,text/plain;q=0.7,image/png;q=0.6,*/*;q=0.5',
+        'Accept-Charset' => 'utf-8;q=0.9,windows-1251;q=0.7,*;q=0.6',
+        'Accept-Encoding' => 'gzip',
+        'Accept-Language' => 'en-us;q=0.9,en;q=0.8,*;q=0.7',
+        'Connection' => 'Keep-Alive',
+        'Keep-Alive' => '300'
+    );
     /**
-     *
+     * @var array
      */
-    public function _construct()
+    private $options;
+    public function __construct()
     {
+        //TODO: Implement construct()
+    }
+    /**
+     * @param array $value
+     *
+     * @return self
+     */
+    public function setOptions($value)
+    {
+        $this->options = $value;
+        return $this;
     }
     /**
      * @param string $userAgent
@@ -84,44 +108,138 @@ class EveApiXmlNetworkRetriever implements EveApiRetrieverInterface
     {
         $this->EveApiXmlData = $data;
         if (empty($this->client)) {
-            $this->httpClient();
+            $this->getClient();
         }
-        $this->connect();
-        if ($this->response->getStatusCode() == '200') {
-            $this->EveApiXmlData->setEveApiXml($this->response->getBody(true));
+        /** @var $response response */
+        $response = $this->sendRequest(
+                         $this->getPost(
+                              $this->EveApiXmlData->getEveApiSectionName(),
+                                  $this->EveApiXmlData->getEveApiName(),
+                                  $this->EveApiXmlData->getEveApiArguments()
+                         )
+        );
+        if ($response->getStatusCode() == '200') {
+            $this->EveApiXmlData->setEveApiXml($response->getBody(true));
         }
     }
     /**
-     * @param $plugin
+     * @return Client|ClientInterface
      */
-    public function httpClient($plugin = null)
+    protected function getClient()
     {
-        $this->client = new Client();
-        if (isset($plugin)) {
-            $this->client->addSubscriber($plugin);
+        /** Check if we already have a client set, else we set one */
+        if (isset($this->client)) {
+            return $this->client;
+        } else {
+            $this->client = new Client();
         }
+        /** Set user agent on client */
         $this->client->setUserAgent($this->userAgent);
+        return $this->client;
     }
     /**
+     * @param $request
+     *
      * @return response
      */
-    private function connect()
+    private function sendRequest(request $request)
     {
-        $EveApiSectionName = $this->EveApiXmlData->getEveApiSectionName();
-        $EveApiName = $this->EveApiXmlData->getEveApiName();
-        $apiArguments = $this->EveApiXmlData->getEveApiArguments();
+        return $response = $request->send();
+    }
+    /**
+     * @param string $EveApiSectionName
+     * @param string $EveApiName
+     * @param array  $EveApiArguments
+     *
+     * @return request
+     */
+    private function getPost(
+        $EveApiSectionName,
+        $EveApiName,
+        $EveApiArguments = array()
+    ) {
         $request = $this->client->post(
                                 array(
-                                    'https://{baseUrl}/{EveApiSectionName}/{EveApiName}.xml.aspx',
+                                    $this->urlTemplate,
                                     array(
                                         'baseUrl' => $this->baseUrl,
                                         'EveApiSectionName' => $EveApiSectionName,
                                         'EveApiName' => $EveApiName
                                     )
                                 ),
-                                    '',
-                                    $apiArguments
+                                    $this->headers,
+                                    $EveApiArguments,
+                                    $this->getOptions()
         );
-        return $this->response = $request->send();
+        return $request;
+    }
+    /**
+     * @return mixed
+     */
+    public function getOptions()
+    {
+        if (isset($this->options)) {
+            return $this->options;
+        } else {
+            return $options = array(
+                'timeout' => 10,
+                'connect_timeout' => 30,
+                'verify' =>
+                    dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'config'
+                    . DIRECTORY_SEPARATOR . 'eveonline.crt',
+            );
+        }
+    }
+    /**
+     * @param string $value
+     *
+     * @return self
+     */
+    public function setBaseUrl($value)
+    {
+        $this->baseUrl = $value;
+        return $this;
+    }
+    /**
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->baseUrl;
+    }
+    /**
+     * @param $plugin
+     */
+    public function addSubscriber($plugin = null)
+    {
+        if (isset($plugin)) {
+            $this->client->addSubscriber($plugin);
+        }
+    }
+    /**
+     * @param Client|ClientInterface $client
+     *
+     * @return $this
+     */
+    public function setClient(ClientInterface $client)
+    {
+        $this->client = $client;
+        return $this;
+    }
+    /**
+     * @param string $urlTemplate
+     *
+     * @return $this
+     * @throws \InvalidArgumentException
+     */
+    public function setUrlTemplate(
+        $urlTemplate = 'https://{baseUrl}/{EveApiSectionName}/{EveApiName}.xml.aspx'
+    ) {
+        if (is_string($urlTemplate)) {
+            $this->urlTemplate = $urlTemplate;
+            return $this;
+        } else {
+            throw new \InvalidArgumentException;
+        }
     }
 }
